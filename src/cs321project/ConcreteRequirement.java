@@ -7,7 +7,7 @@ public class ConcreteRequirement extends Requirement {
 	private int credits;
 	
 	public ConcreteRequirement(String subject, int number, int credits) {
-		super();
+		super("dummyValue");
 		this.subject = subject;
 		this.number = number;
 		this.credits = credits;
