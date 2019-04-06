@@ -1,0 +1,18 @@
+CS_101_Preview of Computer Science
+CS_105_Computer Ethics and Society
+CS_112_Introduction of Computer Programming
+MATH_113_Analytic Geometry & Calculus I
+CS_211_Object-Oriented Programming_1_CS_112
+CS_262_Introduction to Low-Level Programming_1_CS_211
+CS_306_Synth. of Ethics and Law for the Computing Prof.
+CS_310_Data Structures_2_MATH_113_CS_211
+CS_321_Software Engineering
+CS_330_Formal Methods and Models
+CS_367_Computer Systems and Programming
+CS_465_Computer Systems Architecture
+CS_483_Analysis of Algorithms
+ECE_301_Digital Electronics
+MATH_114_Analytic Geometry & Calculus II
+MATH_125_Discrete Mathematics I
+MATH_203_Linear Algebra
+MATH_213_Analytic Geometry & Calculus III
