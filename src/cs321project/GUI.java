@@ -63,7 +63,7 @@ public class GUI extends JFrame {
 		menuItem = new JMenuItem("New");
 		menuItem.setPreferredSize(new Dimension(150, menuItem.getPreferredSize().height));
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
-		menuItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
 
 			@Override
@@ -78,7 +78,7 @@ public class GUI extends JFrame {
 		menuItem = new JMenuItem("Open");
 		menuItem.setPreferredSize(new Dimension(150, menuItem.getPreferredSize().height));
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
-		menuItem.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
 
 			@Override
@@ -93,7 +93,7 @@ public class GUI extends JFrame {
 		menuItem = new JMenuItem("Save");
 		menuItem.setPreferredSize(new Dimension(150, menuItem.getPreferredSize().height));
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
-		menuItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
 
 			@Override
