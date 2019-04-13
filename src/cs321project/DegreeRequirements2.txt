@@ -1,0 +1,39 @@
+University Core
+Literature
+Arts
+Western Civilization/World History
+Global Understanding
+Social and Behavioral Science
+Social Sciences and Humanities_27
+Computer Science Department
+COMM_100_Public Speaking_3
+Natural Science,Sequence1
+Natural Science,Sequence2
+Natural Science,Additional
+Major in Computer Science
+MATH_113_Analytic Geometry & Calculus I_4
+MATH_114_Analytic Geometry & Calculus II_4_1_MATH_113
+MATH_125_Discrete Mathematics I_3_1_MATH_113
+MATH_203_Linear Algebra_3_1_MATH_114
+MATH_213_Analytic Geometry & Calculus III_3_1_MATH_114
+STAT_344_Probability and Statistics for Engrs. and Sci. I_3_1_MATH_114
+CS_101_Preview of Computer Science_3
+CS_105_Computer Ethics and Society_3
+CS_112_Introduction of Computer Programming_3
+CS_211_Object-Oriented Programming_3_1_CS_112
+CS_262_Introduction to Low-Level Programming_3_1_CS_211
+CS_306_Synth. of Ethics and Law for the Computing Prof._3_1_CS_105
+CS_310_Data Structures_3_2_MATH_113_CS_211
+CS321 Software Engineering
+CS330 Formal Methods and Models
+CS367 Computer Systems and Programming
+CS465 Computer Systems Architecture
+CS483 Analysis of Algorithms
+ECE301 Digital Electronics
+Senior CS
+Elective One of:
+CS463 Comparative Programming Language
+CS471 Operating Systems
+CS475 Concurrent and Distributed Systems
+Senior CS, Additional_12
+CS-Related Courses_6
