@@ -1,6 +1,5 @@
 package cs321project;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,15 +12,10 @@ public class Degree {
 	public Degree() {
 		this.requirements = new ArrayList<>();
 	}
-	public Degree(String inputFile, String outputFile){
-		handler = new FileHandler(inputFile, outputFile);
-		//not going to do a hard copy.  be careful not to accidentally lose the object or dump the contents.
-		try {
-			allRequirements = handler.getCourseReqs();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	//be careful with this!
+	public void setHashTable(HashMap<String, ArrayList<Requirement>> table) {
+		//note that i'm still not doing a hard copy.
+		allRequirements = table;
 	}
 	public ArrayList<Requirement> getUniversityCore() {
 		return allRequirements.get("University Core");

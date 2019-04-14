@@ -21,8 +21,15 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
-
-	public HashMap<String, ArrayList<Requirement>> getCourseReqs() throws IOException {
+	public Degree getDegree() throws IOException {
+		Degree degree = new Degree();
+		getCourseReqs();
+		degree.setHashTable(categories);
+		
+		return degree;
+	}
+	//HashMap<String, ArrayList<Requirement>>
+	private void getCourseReqs() throws IOException {
 		// e.g. when you hit "University Foundation" in the input file, do
 		// hashMap.add("University Foundation", new ArrayList<Requirement>());
 		// and for each requirement, do
@@ -53,7 +60,7 @@ public class FileHandler {
 		setCategories(currentCategory, nextCategory);
 		
 
-		return categories;
+		//return categories;
 	}
 
 	private void setCategories(String currentCategory, String nextCategory) {
