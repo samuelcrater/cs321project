@@ -6,9 +6,9 @@ Global Understanding_0_3
 Social and Behavioral Science_0_3
 Computer Science Department
 COMM_100_Public Speaking_0_3
-Natural Science, Sequence1_0_3
-Natural Science, Sequence2_0_3
-Natural Science, Additional_0_3
+Natural Science, Sequence1_0_4
+Natural Science, Sequence2_0_4
+Natural Science, Additional_0_4
 Major in Computer Science
 MATH_113_Analytic Geometry & Calculus I_4_0
 MATH_114_Analytic Geometry & Calculus II_4_0_1_MATH_113
