@@ -36,15 +36,12 @@ public class FileHandler {
 		// hashMap.get("University Foundation").add(new Abstract/Concrete(...));
 		categories = new HashMap<String, ArrayList<Requirement>>();
 		String currentCategory = "University Core";
-		String nextCategory = "Social Sciences and Humanities";
+		String nextCategory = "Computer Science Department";
 
 		// set up very first category
 		String readLine = br.readLine();
 		categories.put(readLine, new ArrayList<Requirement>());
 		// didnt want a bunch of while loops, using function calls instead
-		setCategories(currentCategory, nextCategory);
-		currentCategory = "Social Sciences and Humanities";
-		nextCategory = "Computer Science Department";
 		setCategories(currentCategory, nextCategory);
 		currentCategory = "Computer Science Department";
 		nextCategory = "Major in Computer Science";
@@ -57,6 +54,9 @@ public class FileHandler {
 		readAllCourses(currentCategory, nextCategory);//another three concrete requirements
 		currentCategory = "Senior CS, Additional";
 		nextCategory = "CS-Related Courses";
+		setCategories(currentCategory, nextCategory);
+		currentCategory = "CS-Related Courses";
+		nextCategory = null;
 		setCategories(currentCategory, nextCategory);
 		
 
@@ -81,19 +81,25 @@ public class FileHandler {
 							parseLine[2], Integer.parseInt(parseLine[3]), Boolean.parseBoolean(parseLine[4])));
 
 				} else {// we have a regular abstract requirement
-					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1])));
+					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]), Integer.parseInt(parseLine[2])));
 				}
 
 			}
-			// setting up next category
-			categories.put(parseLine[0], new ArrayList<Requirement>());
+			
+			//making sure we aren't overriding an existing category
+			if(nextCategory != null) {
+				// setting up next category
+				categories.put(parseLine[0], new ArrayList<Requirement>());
+			}
+			
 			// we have a category that just has credits associated with it and nothing else,
 			// ie Social Sciences and Humanities. Going to
 			// add this as both its own category and an abstract requirement
-			if (parseLine.length >= 3) {
-				categories.get(parseLine[0]).add(new AbstractRequirement(parseLine[0],
-						Boolean.parseBoolean(parseLine[1]), Integer.parseInt(parseLine[2])));
-			}
+			/*
+			 * if (parseLine.length >= 3) { categories.get(parseLine[0]).add(new
+			 * AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+			 * Integer.parseInt(parseLine[2]))); }
+			 */
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -165,10 +171,11 @@ public class FileHandler {
 			// we have a category that just has credits associated with it and nothing else,
 			// ie Social Sciences and Humanities. Going to
 			// add this as both its own category and an abstract requirement
-			if (courseParse.length >= 3) {
-				categories.get(courseParse[0]).add(new AbstractRequirement(courseParse[0],
-						Boolean.parseBoolean(courseParse[1]), Integer.parseInt(courseParse[2])));
-			}
+			/*
+			 * if (courseParse.length >= 3) { categories.get(courseParse[0]).add(new
+			 * AbstractRequirement(courseParse[0], Boolean.parseBoolean(courseParse[1]),
+			 * Integer.parseInt(courseParse[2]))); }
+			 */
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

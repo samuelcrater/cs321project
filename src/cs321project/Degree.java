@@ -20,9 +20,6 @@ public class Degree {
 	public ArrayList<Requirement> getUniversityCore() {
 		return allRequirements.get("University Core");
 	}
-	public ArrayList<Requirement> getSocialSciencesAndHumanities() {
-		return allRequirements.get("Social Sciences and Humanities");
-	}
 	public ArrayList<Requirement> getComputerScienceDepartment() {
 		return allRequirements.get("Computer Science Department");
 	}
