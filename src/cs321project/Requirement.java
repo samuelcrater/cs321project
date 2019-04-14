@@ -8,7 +8,7 @@ public abstract class Requirement {
 	private String label;
 	private String subject;
 	private int number;
-	private ArrayList<Requirement> prerequisiteFor;
+	private ArrayList<Requirement> prerequisitesNeeded;
 	
 	public Requirement(String label) {
 		this(label, false);
@@ -16,12 +16,13 @@ public abstract class Requirement {
 	public Requirement(String label, boolean fulfilled) {
 		this.label = label;
 		this.fulfilled = fulfilled;
-		this.prerequisiteFor = new ArrayList<>();
+		this.prerequisitesNeeded = new ArrayList<>();
 	}
-	public Requirement(String label, String subject, int number) {
+	public Requirement(String label, String subject, int number, boolean fulfilled) {
 		this.label = label;
 		this.subject = subject;
 		this.number = number;
+		this.fulfilled = fulfilled;
 	}
 	public boolean isFulfilled() {
 		return this.fulfilled;
@@ -32,14 +33,14 @@ public abstract class Requirement {
 	}
 	
 	public void addPrerequisiteFor(Requirement r) {
-		if(prerequisiteFor == null) {
-			this.prerequisiteFor = new ArrayList<>();
+		if(prerequisitesNeeded == null) {
+			this.prerequisitesNeeded = new ArrayList<>();
 		}
-		this.prerequisiteFor.add(r);
+		this.prerequisitesNeeded.add(r);
 	}
 	
 	public ArrayList<Requirement> getPrerequisiteFor() {
-		return this.prerequisiteFor;
+		return this.prerequisitesNeeded;
 	}
 	public String getLabel() {
 		return this.label;
