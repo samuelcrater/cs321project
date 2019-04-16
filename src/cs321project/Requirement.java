@@ -51,4 +51,15 @@ public abstract class Requirement {
 	public int getNumber() {
 		return this.number;
 	}
+	public boolean isEqual(Requirement r)
+	{
+		boolean ret=false;
+		if(r.getLabel().equals(this.getLabel()))
+			if(r.getSubject()!=null&&r.getSubject().equals(subject))
+				ret = true;
+			else
+				if(r.getSubject()==null && subject==null)
+					ret=true;
+		return ret;
+	}
 }
