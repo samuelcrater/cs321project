@@ -47,17 +47,20 @@ public class Schedule {
 			{
 				boolean canAdd=true;
 				//check if there is a class that is a requirement for this class in requirements
-				for(Requirement chk:reqs)
+				if(reqNext.getPrerequisiteFor()!=null)
 				{
-					for(Requirement compare:chk.getPrerequisiteFor())
+					for(Requirement chk:reqNext.getPrerequisiteFor())
 					{
-						if(compare.isEqual(reqNext))
-						{
-							canAdd=false;
-						}
+							for(Requirement compare:reqs)
+							{
+								if(compare.isEqual(chk))
+								{
+									canAdd=false;
+								}
+							}
 					}
 				}
-				//if no requirements are found, add the class to the semester
+				//if no requirements are found in the "to be added" arraylist, try to add
 				if(canAdd)
 				{
 					boolean added = false;
@@ -66,18 +69,43 @@ public class Schedule {
 						throw new IndexOutOfBoundsException("There aren't enough semesters to add to, I messed up the logic here.");
 					else
 					{
-						//try to add the course to the current semester
-						added = semesters.get(semesterCntr).addCourse(reqNext);
-						if(added)
-							canRemove=true;
+						//check if prereqs exist in the semester
+						boolean addable = true;
+						for(Requirement semesterChk:semesters.get(semesterCntr).getCourses())
+						{
+							if(reqNext.getPrerequisiteFor()!=null)
+							{
+								for(Requirement semesterCompare:reqNext.getPrerequisiteFor())
+								{
+									if(semesterChk.isEqual(semesterCompare))
+										addable=false;
+								}
+							}
+						}
+						if(addable)
+						{
+							//try to add the course to the current semester
+							added = semesters.get(semesterCntr).addCourse(reqNext);
+							if(added)
+								canRemove=true;
+							else
+							{
+								//if the semester is full and returns false, make a new semester and add to that one
+								semesters.add(new Semester());
+								semesterCntr++;
+								added = semesters.get(semesterCntr).addCourse(reqNext);
+								if(!added)
+									throw new IndexOutOfBoundsException("wow the logic here is wrong");
+								canRemove=true;
+							}
+						}
 						else
 						{
-							//if the semester is full and returns false, make a new semester and add to that one
 							semesters.add(new Semester());
 							semesterCntr++;
 							added = semesters.get(semesterCntr).addCourse(reqNext);
 							if(!added)
-								throw new IndexOutOfBoundsException("wow the logic here is wrong");
+								throw new IndexOutOfBoundsException("wow the logic here is wrong x2");
 							canRemove=true;
 						}
 					}
@@ -119,17 +147,17 @@ public class Schedule {
 			{
 				boolean canAdd=true;
 				//check if there is a class that is a requirement for this class in requirements
-				for(Requirement chk:reqs)
+				if(reqNext.getPrerequisiteFor()!=null)
 				{
-					if(chk.getPrerequisiteFor()!=null)
+					for(Requirement chk:reqNext.getPrerequisiteFor())
 					{
-						for(Requirement compare:chk.getPrerequisiteFor())
-						{
-							if(compare.isEqual(reqNext))
+							for(Requirement compare:reqs)
 							{
-								canAdd=false;
+								if(compare.isEqual(chk))
+								{
+									canAdd=false;
+								}
 							}
-						}
 					}
 				}
 				//if no requirements are found in the "to be added" arraylist, try to add
@@ -145,11 +173,11 @@ public class Schedule {
 						boolean addable = true;
 						for(Requirement semesterChk:semesters.get(semesterCntr).getCourses())
 						{
-							if(semesterChk.getPrerequisiteFor()!=null)
+							if(reqNext.getPrerequisiteFor()!=null)
 							{
-								for(Requirement semesterCompare:semesterChk.getPrerequisiteFor())
+								for(Requirement semesterCompare:reqNext.getPrerequisiteFor())
 								{
-									if(reqNext.isEqual(semesterCompare))
+									if(semesterChk.isEqual(semesterCompare))
 										addable=false;
 								}
 							}
@@ -177,7 +205,7 @@ public class Schedule {
 							semesterCntr++;
 							added = semesters.get(semesterCntr).addCourse(reqNext);
 							if(!added)
-								throw new IndexOutOfBoundsException("wow the logic here is wrong");
+								throw new IndexOutOfBoundsException("wow the logic here is wrong x2");
 							canRemove=true;
 						}
 					}
@@ -240,11 +268,11 @@ public class Schedule {
 						Semester se = semesters.get(i);
 						for(Requirement r:se.getCourses())
 						{
-							if(r.getPrerequisiteFor()!=null)
+							if(toMove.getPrerequisiteFor()!=null)
 							{
-								for(Requirement check:r.getPrerequisiteFor())
+								for(Requirement check:toMove.getPrerequisiteFor())
 								{
-									if(check.isEqual(toMove))
+									if(check.isEqual(r))
 									{
 										canAdd=false;
 										//tried to add a class to a semester before/with a prereq
@@ -263,16 +291,15 @@ public class Schedule {
 					 */
 					for(int i=startIndex;i<stopIndex;i++)
 					{
-						if(toMove.getPrerequisiteFor()!=null)
-						{
 						Semester se = semesters.get(i);
-							
-							for(Requirement r:se.getCourses())
+						
+						for(Requirement r:se.getCourses())
+						{
+							if(r.getPrerequisiteFor()!=null)
 							{
-							
-								for(Requirement check:toMove.getPrerequisiteFor())
+								for(Requirement check:r.getPrerequisiteFor())
 								{
-									if(r.isEqual(check))
+									if(check.isEqual(toMove))
 									{
 										canAdd=false;
 										//tried to place a class with/past it's a prereq for
