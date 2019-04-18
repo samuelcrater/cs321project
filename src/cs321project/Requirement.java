@@ -5,9 +5,10 @@ import java.util.ArrayList;
 public abstract class Requirement {
 
 	private boolean fulfilled;
-	private String label;
+	private String label;//full course name, or name of abstract requirement ie. "Literature"
 	private String subject;
 	private int number;
+	private int credits;
 	private ArrayList<Requirement> prerequisitesNeeded;
 	
 	public Requirement(String label) {
@@ -18,11 +19,19 @@ public abstract class Requirement {
 		this.fulfilled = fulfilled;
 		this.prerequisitesNeeded = new ArrayList<>();
 	}
-	public Requirement(String label, String subject, int number, boolean fulfilled) {
+	//used for abstract requirements
+	public Requirement(String label, boolean fulfilled, int credits) {
+		this.label = label;
+		this.fulfilled = fulfilled;
+		this.credits = credits;
+	}
+	//used for concrete requirements
+	public Requirement(String label, String subject, int number, boolean fulfilled, int credits) {
 		this.label = label;
 		this.subject = subject;
 		this.number = number;
 		this.fulfilled = fulfilled;
+		this.credits = credits;
 	}
 	public boolean isFulfilled() {
 		return this.fulfilled;
@@ -45,10 +54,18 @@ public abstract class Requirement {
 	public String getLabel() {
 		return this.label;
 	}
+	//need this for writing ConcreteRequirements to a file in the FileHandler, 
+	//since getLabel is being overwritten in ConcreteRequirements
+	public String getLabelForFileHandler() {
+		return this.label;
+	}
 	public String getSubject() {
 		return this.subject;
 	}
 	public int getNumber() {
 		return this.number;
+	}
+	public int getCredits() {
+		return this.credits;
 	}
 }

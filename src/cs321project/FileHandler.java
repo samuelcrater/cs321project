@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class FileHandler {
 	private HashMap<String, ArrayList<Requirement>> categories;
 	private BufferedReader br;
+	private PrintWriter printWriter;
 	private String inputFile;
 	private String outputFile;
 
@@ -58,7 +59,7 @@ public class FileHandler {
 		currentCategory = "CS-Related Courses";
 		nextCategory = null;
 		setCategories(currentCategory, nextCategory);
-		
+		br.close();
 
 		//return categories;
 	}
@@ -78,7 +79,7 @@ public class FileHandler {
 				// Science Department category
 				if (parseLine[0].equals("COMM")) {
 					getCurrentCategory.add(new ConcreteRequirement(parseLine[0], Integer.parseInt(parseLine[1]),
-							parseLine[2], Integer.parseInt(parseLine[3]), Boolean.parseBoolean(parseLine[4])));
+							parseLine[2], Integer.parseInt(parseLine[4]), Boolean.parseBoolean(parseLine[3])));
 
 				} else {// we have a regular abstract requirement
 					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]), Integer.parseInt(parseLine[2])));
@@ -111,7 +112,13 @@ public class FileHandler {
 	private void readAllCourses(String currentCategory, String nextCategory) {
 		String currentCourse; // we're using this to read through our txt file full of courses line by line
 		try {
-			ArrayList<Requirement> majorInCompSci = categories.get(currentCategory);
+			ArrayList<Requirement> majorInCompSci = categories.get("Major in Computer Science");
+			//noticed that the category of "Senior CS, ..." all of its concrete requirements were missing their
+			//prereqs.  Still need the major in comp sci for comparisons
+			ArrayList<Requirement> oneSeniorCourse = null;
+			if(currentCategory.equals("Senior CS, Elective One of:")) {
+				oneSeniorCourse = categories.get(currentCategory);
+			}
 			String courseParse[] = null;
 			// this while loop specifically reads cs classes in our DegreeRequirements txt
 			// file.
@@ -129,7 +136,13 @@ public class FileHandler {
 				// courseParse[4] is if the course has been fulfilled
 				ConcreteRequirement course = new ConcreteRequirement(courseParse[0], Integer.parseInt(courseParse[1]),
 						courseParse[2], Integer.parseInt(courseParse[3]),Boolean.parseBoolean(courseParse[4]));
-				majorInCompSci.add(course);
+				if(currentCategory.equals("Major in Computer Science")) {
+					majorInCompSci.add(course);
+				}
+				//if we're not in Major in Computer Science, then we're in the "Senior CS, ..."
+				else {
+					oneSeniorCourse.add(course);
+				}
 				// looking for prereqs
 				// courseParse[5] is the number of prereqs for a course
 				// courseParse[6] will have the subject, courseParse[7] will have the number
@@ -182,13 +195,91 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void saveSchedule() {
+		try {
+			printWriter = new PrintWriter(new FileWriter(outputFile));
+			writeAbstract("University Core");
+			writeAbstract("Computer Science Department");
+			writeConcrete("Major in Computer Science");
+			writeConcrete("Senior CS, Elective One of:");
+			writeAbstract("Senior CS, Additional");
+			writeAbstract("CS-Related Courses");
+			printWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void writeAbstract(String currentCategory) {
+		ArrayList<Requirement> category = categories.get(currentCategory);
+		printWriter.printf("%s%n",currentCategory);//write category to file
+		for(int i = 0; i < category.size(); i++){
+			Requirement temp = category.get(i);
+			//we have our one concrete requirement, regular write to wont work.
+			if(temp.getLabelForFileHandler().equals("Public Speaking")) {
+				//damn printf wont just write 1 or 0 for fulfilled!
+				if(temp.isFulfilled()) {
+					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), 1, temp.getCredits());
+				}
+				else {
+					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), 0, temp.getCredits());
+				}
+			}
+			//we just have our usual abstract requirement
+			else {
+				if(temp.isFulfilled()) {
+					printWriter.printf("%s_%d_%d%n",temp.getLabel(), 1, temp.getCredits());
+				}
+				else {
+					printWriter.printf("%s_%d_%d%n",temp.getLabel(), 0, temp.getCredits());
+				}
+			}
+		}
+	}
+	private void writeConcrete(String currentCategory) {
+		ArrayList<Requirement> category = categories.get(currentCategory);
+		printWriter.printf("%s%n",currentCategory);//write category to file
+		for(int i = 0; i < category.size(); i++){
+			Requirement temp = category.get(i);
+			if(temp.getPrerequisiteFor() == null) { //course with no prereqs
+				if(temp.isFulfilled()) {
+					//note that in the text file credits and labels have switched position 
+					//for all concrete requirements except COMM
+					//since apparently i hate consistency.
+					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), temp.getCredits(), 1);
+				}
+				else {
+					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), temp.getCredits(), 0);
+				}
+			}
+			//we have an array of prereqs
+			else {
+				ArrayList<Requirement> getPreReqs = temp.getPrerequisiteFor();
+				String course = null;
+				if(temp.isFulfilled()) {
+					course = temp.getSubject() + "_" + temp.getNumber() +"_"+ temp.getLabelForFileHandler() +"_"+ temp.getCredits() +"_"+ 1 +"_"+getPreReqs.size();
+				}
+				else {
+					course = temp.getSubject() + "_" + temp.getNumber() +"_"+ temp.getLabelForFileHandler() +"_"+ temp.getCredits() +"_"+ 0 +"_"+getPreReqs.size(); 
+				}
+				//set up initial course, with number of prereqs tacked onto end
+				
+				for(int j = 0; j < getPreReqs.size(); j++) {
+					Requirement prereq = getPreReqs.get(j);
+					course = course + "_" + prereq.getSubject() + "_" + prereq.getNumber();
+				}
+				printWriter.printf("%s%n", course);
+			}
+		}
+	}
 	public static void main(String[] args) {
-		// this file path will need to change on your computer
+		// the file paths will need to change on your computer
 		FileHandler test = new FileHandler(
-				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements2.txt", "somecrap");
+				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt", "D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
 			test.getCourseReqs();
+			test.saveSchedule();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

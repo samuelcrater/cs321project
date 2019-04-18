@@ -1,17 +1,23 @@
 package cs321project;
 
+import java.io.IOException;
+
 public class ScheduleController {
 
 	private FileHandler fileHandler;
 	private Degree degree;
 	private Schedule schedule;
 	
-	protected void loadFile() {
-		
+	public ScheduleController(String inputFilePath, String outputFilePath) {
+		fileHandler = new FileHandler(inputFilePath,outputFilePath);
+	}
+	
+	protected void loadFile() throws IOException {
+		degree = fileHandler.getDegree();
 	}
 	
 	protected void saveSchedule() {
-		
+		fileHandler.saveSchedule();
 	}
 	
 	protected void generateSchedule() {
@@ -19,7 +25,7 @@ public class ScheduleController {
 	}
 	
 	protected void fufillRequirement(Requirement r) {
-		
+		r.setFulfilled(true);
 	}
 	
 	//maybe use ints instead of objects

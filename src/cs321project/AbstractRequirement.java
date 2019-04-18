@@ -8,7 +8,7 @@ public class AbstractRequirement extends Requirement {
 		this.name = name;
 	}
 	public AbstractRequirement(String name, boolean fulfilled, int creditRequirement) {
-		super(name);
+		super(name,fulfilled,creditRequirement);
 		this.name = name;
 		this.creditRequirement = creditRequirement;
 	}

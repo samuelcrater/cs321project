@@ -8,7 +8,7 @@ public class ConcreteRequirement extends Requirement {
 	private boolean fulfilled;
 	
 	public ConcreteRequirement(String subject, int number, String label, int credits, boolean fulfilled) {
-		super(label,subject,number,fulfilled);
+		super(label,subject,number,fulfilled,credits);
 		this.subject = subject;
 		this.number = number;
 		this.credits = credits;
@@ -22,7 +22,6 @@ public class ConcreteRequirement extends Requirement {
 	public int getNumber() {
 		return this.number;
 	}
-	
 	public int getCredits() {
 		return this.credits;
 	}
