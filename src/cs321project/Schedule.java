@@ -1,12 +1,13 @@
 package cs321project;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
 public class Schedule {
 	private ArrayList<Semester> semesters;
 	public Schedule()
 	{
 		semesters = new ArrayList<>();
+		semesters.add(new Semester());
 	}
 	/*
 	 * Generate a schedule based on what is needed in the degree
@@ -35,96 +36,78 @@ public class Schedule {
 		for(Requirement k:d.getUniversityCore())
 			reqs.add(k);
 		int semesterCntr=0;
+		int addedAt=-1;
 		while(!reqs.isEmpty())
 		{
-			if(semesters.isEmpty())
-				semesters.add(new Semester());
-			//get the next class
-			Requirement reqNext = reqs.get(0);
-			boolean canRemove=false;
-			//check if this class needs to be taken
-			if(!reqNext.isFulfilled())
+			boolean addable=true;
+			boolean noListBlock=true;
+			boolean added=false;
+			for(int listCntr=0;listCntr<reqs.size();listCntr++)
 			{
-				boolean canAdd=true;
-				//check if there is a class that is a requirement for this class in requirements
+				addable=true;
+				noListBlock=true;
+				added=false;
+				Requirement reqNext = reqs.get(listCntr);
 				if(reqNext.getPrerequisiteFor()!=null)
 				{
-					for(Requirement chk:reqNext.getPrerequisiteFor())
+					for(Requirement r:reqNext.getPrerequisiteFor())
 					{
-							for(Requirement compare:reqs)
+						for(Requirement listchk:reqs)
+						{
+							if(r.isEqual(listchk))
 							{
-								if(compare.isEqual(chk))
-								{
-									canAdd=false;
-								}
+								noListBlock=false;
+								break;
 							}
+						}
+						if(!noListBlock)
+							break;
 					}
 				}
-				//if no requirements are found in the "to be added" arraylist, try to add
-				if(canAdd)
+				if(noListBlock)
 				{
-					boolean added = false;
-					//error checking, this shouldn't happen. if it does I messed up
-					if(semesters.size()<=semesterCntr)
-						throw new IndexOutOfBoundsException("There aren't enough semesters to add to, I messed up the logic here.");
-					else
+					if(reqNext.getPrerequisiteFor()!=null)
 					{
-						//check if prereqs exist in the semester
-						boolean addable = true;
-						for(Requirement semesterChk:semesters.get(semesterCntr).getCourses())
+						for(Requirement r :reqNext.getPrerequisiteFor())
 						{
-							if(reqNext.getPrerequisiteFor()!=null)
+							for(Requirement semChk : semesters.get(semesterCntr).getCourses())
 							{
-								for(Requirement semesterCompare:reqNext.getPrerequisiteFor())
+								if(r.isEqual(semChk))
 								{
-									if(semesterChk.isEqual(semesterCompare))
-										addable=false;
+									addable=false;
+									break;
 								}
 							}
+
+							if(!addable)
+								break;
 						}
-						if(addable)
+					}
+					if(addable)
+					{
+						added = semesters.get(semesterCntr).addCourse(reqNext);
+						if(added)
 						{
-							//try to add the course to the current semester
-							added = semesters.get(semesterCntr).addCourse(reqNext);
-							if(added)
-								canRemove=true;
-							else
-							{
-								//if the semester is full and returns false, make a new semester and add to that one
-								semesters.add(new Semester());
-								semesterCntr++;
-								added = semesters.get(semesterCntr).addCourse(reqNext);
-								if(!added)
-									throw new IndexOutOfBoundsException("wow the logic here is wrong");
-								canRemove=true;
-							}
-						}
-						else
-						{
-							semesters.add(new Semester());
-							semesterCntr++;
-							added = semesters.get(semesterCntr).addCourse(reqNext);
-							if(!added)
-								throw new IndexOutOfBoundsException("wow the logic here is wrong x2");
-							canRemove=true;
+							addedAt=listCntr;
+							break;
 						}
 					}
 				}
+				
 			}
-			else
+			if(added)
 			{
-				canRemove=true;
+				reqs.remove(addedAt);
 			}
-			if(canRemove)
+			else 
 			{
-				reqs.remove(0);
+				semesters.add(new Semester());
+				semesterCntr++;
 			}
-			else
-			{
-				Requirement putAtEnd = reqs.remove(0);
-				reqs.add(putAtEnd);
-			}
+			
 		}
+		
+		
 	}
 	/*
 	 * generate a schedule based off of an arraylist of classes (for testing)
@@ -132,99 +115,81 @@ public class Schedule {
 	public void genSchedule(ArrayList<Requirement>c)
 	{
 		ArrayList<Requirement> reqs = new ArrayList<>();
-		for(Requirement r: c)
+		for(Requirement r:c)
 			reqs.add(r);
 		int semesterCntr=0;
+		int addedAt=-1;
 		while(!reqs.isEmpty())
 		{
-			if(semesters.isEmpty())
-				semesters.add(new Semester());
-			//get the next class
-			Requirement reqNext = reqs.get(0);
-			boolean canRemove=false;
-			//check if this class needs to be taken
-			if(!reqNext.isFulfilled())
+			boolean addable=true;
+			boolean noListBlock=true;
+			boolean added=false;
+			for(int listCntr=0;listCntr<reqs.size();listCntr++)
 			{
-				boolean canAdd=true;
-				//check if there is a class that is a requirement for this class in requirements
+				addable=true;
+				noListBlock=true;
+				added=false;
+				Requirement reqNext = reqs.get(listCntr);
 				if(reqNext.getPrerequisiteFor()!=null)
 				{
-					for(Requirement chk:reqNext.getPrerequisiteFor())
+					for(Requirement r:reqNext.getPrerequisiteFor())
 					{
-							for(Requirement compare:reqs)
+						for(Requirement listchk:reqs)
+						{
+							if(r.isEqual(listchk))
 							{
-								if(compare.isEqual(chk))
-								{
-									canAdd=false;
-								}
+								noListBlock=false;
+								break;
 							}
+						}
+						if(!noListBlock)
+							break;
 					}
 				}
-				//if no requirements are found in the "to be added" arraylist, try to add
-				if(canAdd)
+				if(noListBlock)
 				{
-					boolean added = false;
-					//error checking, this shouldn't happen. if it does I messed up
-					if(semesters.size()<=semesterCntr)
-						throw new IndexOutOfBoundsException("There aren't enough semesters to add to, I messed up the logic here.");
-					else
+					if(reqNext.getPrerequisiteFor()!=null)
 					{
-						//check if prereqs exist in the semester
-						boolean addable = true;
-						for(Requirement semesterChk:semesters.get(semesterCntr).getCourses())
+						for(Requirement r :reqNext.getPrerequisiteFor())
 						{
-							if(reqNext.getPrerequisiteFor()!=null)
+							for(Requirement semChk : semesters.get(semesterCntr).getCourses())
 							{
-								for(Requirement semesterCompare:reqNext.getPrerequisiteFor())
+								if(r.isEqual(semChk))
 								{
-									if(semesterChk.isEqual(semesterCompare))
-										addable=false;
+									addable=false;
+									break;
 								}
 							}
+
+							if(!addable)
+								break;
 						}
-						if(addable)
+					}
+					if(addable)
+					{
+						added = semesters.get(semesterCntr).addCourse(reqNext);
+						if(added)
 						{
-							//try to add the course to the current semester
-							added = semesters.get(semesterCntr).addCourse(reqNext);
-							if(added)
-								canRemove=true;
-							else
-							{
-								//if the semester is full and returns false, make a new semester and add to that one
-								semesters.add(new Semester());
-								semesterCntr++;
-								added = semesters.get(semesterCntr).addCourse(reqNext);
-								if(!added)
-									throw new IndexOutOfBoundsException("wow the logic here is wrong");
-								canRemove=true;
-							}
-						}
-						else
-						{
-							semesters.add(new Semester());
-							semesterCntr++;
-							added = semesters.get(semesterCntr).addCourse(reqNext);
-							if(!added)
-								throw new IndexOutOfBoundsException("wow the logic here is wrong x2");
-							canRemove=true;
+							addedAt=listCntr;
+							break;
 						}
 					}
 				}
+				
 			}
-			else
+			if(added)
 			{
-				canRemove=true;
+				reqs.remove(addedAt);
 			}
-			if(canRemove)
+			else 
 			{
-				reqs.remove(0);
+				semesters.add(new Semester());
+				semesterCntr++;
 			}
-			else
-			{
-				Requirement putAtEnd = reqs.remove(0);
-				reqs.add(putAtEnd);
-			}
+			
 		}
+		
+		
 	}
 		
 	/*
@@ -336,13 +301,154 @@ public class Schedule {
 			ret=1;
 		return ret;
 	}
+	/*
+	 * Swaps 2 courses between semesters
+	 * returns:
+	 * 0- successful swap
+	 * 1- semester 1 is out of bounds
+	 * 2- semester 2 is out of bounds
+	 * 3- course1 is out of bounds
+	 * 4- course2 is out of bounds
+	 * 5- trying to move a course back to/before a prerequisite
+	 * 6- trying to move a prerequisite to/past a class that needs it
+	 */
+	public int swapCourse(int course1,int semester1, int course2, int semester2)
+	{
+		int ret = 0;
+		//Semester 1 is out of bounds
+		if(semester1<0||semester1>=semesters.size())
+			ret=1;
+		else
+		{
+			//Semester 2 is out of bounds
+			if(semester2<0||semester2>=semesters.size())
+				ret=2;
+			else
+			{
+				//Course 1 is out of bounds
+				if(course1<0 || course1>=semesters.get(semester1).getCourses().size())
+					ret=3;
+				else
+				{
+					//Course 2 is out of bounds
+					if(course2<0||course2 >=semesters.get(semester2).getCourses().size())
+						ret=4;
+					else
+					{
+						//Check for the same semester
+						if(semester1==semester2) 
+						{
+							Collections.swap(semesters.get(semester2).getCourses(), course1, course2);
+						}
+						//Branch check based on which semester comes first
+						else 
+						{
+							boolean canMove = true;
+							Requirement move1 = semesters.get(semester1).getCourses().get(course1);
+							Requirement move2 = semesters.get(semester2).getCourses().get(course2);
+							if(semester1>semester2)
+							{
+								if(move1.getPrerequisiteFor()!=null)
+								{
+									for(int i = semester2;i<=semester1;i++)
+									{
+										for(Requirement chk:semesters.get(i).getCourses())
+										{
+											for(Requirement mvChk:move1.getPrerequisiteFor())
+											{
+												if(chk.isEqual(mvChk))
+												{
+													canMove=false;
+													ret = 5;
+												}
+											}
+										}
+									}
+								}
+								
+								for(int i = semester2;i<= semester1;i++)
+								{
+									for(Requirement r:semesters.get(i).getCourses())
+									{
+										if(r.getPrerequisiteFor()!=null)
+										{
+											for(Requirement chk:r.getPrerequisiteFor())
+											{
+												if(chk.isEqual(move2))
+												{
+													canMove=false;
+													ret=6;
+												}
+											}
+										}
+									}
+								}
+								
+							}
+							else
+							{
+								
+								for(int i = semester1;i<=semester2;i++)
+								{
+									for(Requirement r:semesters.get(i).getCourses())
+									{
+										if(r.getPrerequisiteFor()!=null)
+										{
+											for(Requirement mvChk:r.getPrerequisiteFor())
+											{
+												if(mvChk.isEqual(move1))
+												{
+													canMove=false;
+													ret = 6;
+												}
+											}
+										}
+									}
+								}
+								if(move2.getPrerequisiteFor()!=null)
+								{
+									for(int i=semester1;i<semester2;i++)
+									{
+										for(Requirement r:semesters.get(i).getCourses())
+										{
+											for(Requirement mvChk:move2.getPrerequisiteFor())
+											{
+												if(r.isEqual(mvChk))
+												{
+													canMove=false;
+													ret=5;
+												}
+											}
+										}
+									}
+								}
+							}
+							if(canMove)
+							{
+								 semesters.get(semester1).getCourses().remove(course1);
+								 semesters.get(semester2).getCourses().remove(course2);
+								 boolean test1 = semesters.get(semester1).addCourse(move2);
+								 boolean test2 = semesters.get(semester2).addCourse(move1);
+								 if(!test1)
+									 System.out.println("Determined that move was feasable but failed move2");
+								 if(!test2)
+									 System.out.println("Determined that move was feasable but failed move1");
+							}
+						}
+						
+					}
+				}
+			}
+		}
+		return ret;
+	}
 	
 	/*
 	 * testing main
 	 */
 	public static void main(String [] args)
 	{
-		Schedule s = new Schedule();
+		Schedule sched = new Schedule();
 		ConcreteRequirement a = new ConcreteRequirement("a",1,"aa",11,false);
 		ConcreteRequirement b = new ConcreteRequirement("b",2,"bb",22,false);
 		b.addPrerequisiteFor(a);
@@ -361,6 +467,8 @@ public class Schedule {
 		ConcreteRequirement i = new ConcreteRequirement("i",9,"ii",99,false);
 		i.addPrerequisiteFor(h);
 		ConcreteRequirement j = new ConcreteRequirement("j",10,"jj",1010,false);
+		j.addPrerequisiteFor(h);
+		j.addPrerequisiteFor(g);
 		ConcreteRequirement k = new ConcreteRequirement("k",11,"kk",1111,false);
 		ConcreteRequirement l = new ConcreteRequirement("l",12,"ll",1212,false);
 		ConcreteRequirement m = new ConcreteRequirement("m",13,"mm",1313,false);
@@ -368,6 +476,8 @@ public class Schedule {
 		ConcreteRequirement o = new ConcreteRequirement("o",15,"oo",1515,false);
 		ConcreteRequirement p = new ConcreteRequirement("p",16,"pp",1616,false);
 		ConcreteRequirement q = new ConcreteRequirement("q",17,"qq",1717,false);
+		ConcreteRequirement r = new ConcreteRequirement("r",18,"rr",1818,false);
+		ConcreteRequirement s = new ConcreteRequirement("s",19,"ss",1919,false);
 		ConcreteRequirement t = new ConcreteRequirement("t",20,"tt",2020,false);
 		ConcreteRequirement u = new ConcreteRequirement("u",21,"uu",2121,false);
 		ConcreteRequirement v = new ConcreteRequirement("v",22,"vv",2222,false);
@@ -375,33 +485,35 @@ public class Schedule {
 		ConcreteRequirement x = new ConcreteRequirement("x",24,"xx",2424,false);
 		ConcreteRequirement y = new ConcreteRequirement("y",25,"yy",2525,false);
 		ConcreteRequirement z = new ConcreteRequirement("z",26,"zz",2626,false);
-		ArrayList<Requirement>r = new ArrayList<>();
-		r.add(a);
-		r.add(b);
-		r.add(c);
-		r.add(d);
-		r.add(e);
-		r.add(f);
-		r.add(g);
-		r.add(h);
-		r.add(i);
-		r.add(j);
-		r.add(k);
-		r.add(l);
-		r.add(m);
-		r.add(n);
-		r.add(o);
-		r.add(p);
-		r.add(q);
-		r.add(t);
-		r.add(u);
-		r.add(v);
-		r.add(w);
-		r.add(x);
-		r.add(y);
-		r.add(z);
-		s.genSchedule(r);
-		ArrayList<Semester> output = s.getScheudle();
+		ArrayList<Requirement>required = new ArrayList<>();
+		required.add(a);
+		required.add(b);
+		required.add(c);
+		required.add(d);
+		required.add(e);
+		required.add(f);
+		required.add(g);
+		required.add(h);
+		required.add(i);
+		required.add(j);
+		required.add(k);
+		required.add(l);
+		required.add(m);
+		required.add(n);
+		required.add(o);
+		required.add(p);
+		required.add(q);
+		required.add(r);
+		required.add(s);
+		required.add(t);
+		required.add(u);
+		required.add(v);
+		required.add(w);
+		required.add(x);
+		required.add(y);
+		required.add(z);
+		sched.genSchedule(required);
+		ArrayList<Semester> output = sched.getScheudle();
 		int symCntr=0;
 		int reqCntr=0;
 		for(Semester se:output)
@@ -417,21 +529,21 @@ public class Schedule {
 		}
 		output=null;
 		int[] results = new int[10];
-		results[0]=s.moveClass(8, 8, 0);
+		results[0]=sched.moveClass(8, 8, 0);
 		System.out.println(results[0]);
-		results[1]=s.moveClass(0, 1, 0);
+		results[1]=sched.moveClass(0, 1, 0);
 		System.out.println(results[1]);
-		results[2]=s.moveClass(0, 8, 0);
+		results[2]=sched.moveClass(0, 8, 0);
 		System.out.println(results[2]);
-		results[3]=s.moveClass(8, 7, 0);
+		results[3]=sched.moveClass(8, 7, 0);
 		System.out.println(results[3]);
-		results[4]=s.moveClass(8, 0, 0);
+		results[4]=sched.moveClass(8, 0, 0);
 		System.out.println(results[4]);
-		results[5]=s.moveClass(0, 8, 4);
+		results[5]=sched.moveClass(0, 8, 4);
 		System.out.println(results[5]);
-		results[6]=s.moveClass(8, 0, 1);
+		results[6]=sched.moveClass(8, 0, 1);
 		System.out.println(results[6]);
-		output = s.getScheudle();
+		output = sched.getScheudle();
 		symCntr=0;
 		reqCntr=0;
 		for(Semester se:output)
