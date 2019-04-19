@@ -68,4 +68,18 @@ public abstract class Requirement {
 	public int getCredits() {
 		return this.credits;
 	}
+	public boolean isEqual(Requirement r)
+	{
+		boolean ret=false;
+
+		if(r.getSubject()!=null&&r.getSubject().equals(subject))
+		{
+			if(r.getNumber()==this.getNumber())
+				ret = true;
+		}
+		else
+			if(r.getSubject()==null && subject==null)
+				ret=true;
+		return ret;
+	}
 }
