@@ -17,6 +17,9 @@ public class Degree {
 		//note that i'm still not doing a hard copy.
 		allRequirements = table;
 	}
+	public HashMap<String, ArrayList<Requirement>> getAllRequirements() {
+		return allRequirements;
+	}
 	public ArrayList<Requirement> getUniversityCore() {
 		return allRequirements.get("University Core");
 	}

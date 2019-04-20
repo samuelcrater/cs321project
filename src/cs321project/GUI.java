@@ -27,7 +27,8 @@ public class GUI extends JFrame {
 	
 	private ScheduleController sc;
 	
-	public GUI () {
+	public GUI() {
+		
 		//makes GUI style itself like its host OS.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -47,15 +48,10 @@ public class GUI extends JFrame {
 		
 		this.setTitle("Degree Planner");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800,600));
+        this.setSize(new Dimension(1000,600));
         this.setResizable(false);
         this.setLocationRelativeTo(null);
 	}
-	
-	//must be called after initialized
-    public void display() {
-        this.setVisible(true);
-    }
     
     private void createMenuBar() {
     	menuBar = new JMenuBar();
@@ -100,35 +96,32 @@ public class GUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//dummy action
-				setSize(900,700);
+				sc.saveSchedule();
 			}
 			
 		});
 		fileMenu.add(menuItem);
 		
-		
 		this.setJMenuBar(menuBar);
+    }
+    
+    //must be called before used
+    public void setScheduleController(ScheduleController sc) {
+    	this.sc = sc;
+    	reqView.setScheduleController(sc);
+    }
+    
+	//must be called after initialized
+    public void display() {
+        this.setVisible(true);
     }
     
     public void updateDegree(HashMap<String, ArrayList<Requirement>> requirements) {
     	reqView.populate(requirements);
     }
     
-    public static void main(String[] args) {
-		GUI gui = new GUI();
-		gui.display();
-		
-		HashMap<String, ArrayList<Requirement>> tester = new HashMap<String, ArrayList<Requirement>>();
-		ArrayList<Requirement> temp = new ArrayList<Requirement>();
-		temp.add(new AbstractRequirement("Oral Communication", false, 0));
-		temp.add(new AbstractRequirement("Quantitative Reasoning", false, 0));
-		tester.put("University Foundation", temp);
-		temp = new ArrayList<Requirement>();
-		temp.add(new AbstractRequirement("Literature", true, 0));
-		temp.add(new AbstractRequirement("Arts", false, 0));
-		tester.put("University Core", temp);
-		
-		gui.updateDegree(tester);
-	}
+    public void updateSchedule(ArrayList<Semester> semesters) {
+    	System.out.println(semesters.size());
+    	schedView.populate(semesters);
+    }
 }

@@ -9,10 +9,14 @@ public class ScheduleController {
 	private FileHandler fileHandler;
 	private Degree degree;
 	private Schedule schedule;
-	protected ScheduleController(String inputFilePath, String outputFilePath)
+	private GUI gui;
+	
+	protected ScheduleController(GUI gui, FileHandler fileHandler)
 	{
 		//Degree constructor handled in loadfile() method
-		fileHandler = new FileHandler(inputFilePath,outputFilePath);
+		this.gui = gui;
+		this.fileHandler = fileHandler;
+		//fileHandler = new FileHandler(inputFilePath,outputFilePath);
 		schedule = new Schedule();
 	}
 	//Spencer's constructor,
@@ -22,6 +26,7 @@ public class ScheduleController {
 	 */
 	protected void loadFile() throws IOException {
 		degree = fileHandler.getDegree();
+		gui.updateDegree(degree.getAllRequirements());
 	}
 	
 	protected void saveSchedule() {
@@ -32,6 +37,7 @@ public class ScheduleController {
 		ArrayList<Semester> ret = null;
 		schedule.genSchedule(degree);
 		ret = schedule.getScheudle();
+		gui.updateSchedule(schedule.getScheudle());
 		return ret;
 	}
 	
