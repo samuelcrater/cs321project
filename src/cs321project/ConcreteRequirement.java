@@ -5,14 +5,12 @@ public class ConcreteRequirement extends Requirement {
 	private String subject;
 	private int number;
 	private int credits;
-	private boolean fulfilled;
 	
 	public ConcreteRequirement(String subject, int number, String label, int credits, boolean fulfilled) {
 		super(label,subject,number,fulfilled,credits);
 		this.subject = subject;
 		this.number = number;
 		this.credits = credits;
-		this.fulfilled = fulfilled;
 	}
 	
 	public String getSubject() {
@@ -26,7 +24,7 @@ public class ConcreteRequirement extends Requirement {
 		return this.credits;
 	}
 	public boolean isFulfilled() {
-		return this.fulfilled;
+		return super.isFulfilled();
 	}
 	@Override
 	public String getLabel() {
