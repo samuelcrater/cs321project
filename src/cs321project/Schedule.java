@@ -123,6 +123,14 @@ public class Schedule {
 				noListBlock=true;
 				added=false;
 				Requirement reqNext = reqs.get(listCntr);
+				if(reqNext.isFulfilled())
+				{
+					addedAt=listCntr;
+					added=true;
+					break;
+				}
+				else
+				{
 				if(reqNext.getPrerequisiteFor()!=null)
 				{
 					for(Requirement r:reqNext.getPrerequisiteFor())
@@ -168,7 +176,8 @@ public class Schedule {
 						}
 					}
 				}
-				
+
+				}
 			}
 			if(added)
 			{
@@ -512,6 +521,7 @@ public class Schedule {
 		j.addPrerequisiteFor(h);
 		j.addPrerequisiteFor(g);
 		ConcreteRequirement k = new ConcreteRequirement("k",11,"kk",1111,false);
+		k.setFulfilled(true);
 		ConcreteRequirement l = new ConcreteRequirement("l",12,"ll",1212,false);
 		ConcreteRequirement m = new ConcreteRequirement("m",13,"mm",1313,false);
 		ConcreteRequirement n = new ConcreteRequirement("n",14,"nn",1414,false);

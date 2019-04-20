@@ -13,6 +13,7 @@ public class ConcreteRequirement extends Requirement {
 		this.number = number;
 		this.credits = credits;
 		this.fulfilled = fulfilled;
+		super.setFulfilled(fulfilled);
 	}
 	
 	public String getSubject() {
@@ -27,7 +28,7 @@ public class ConcreteRequirement extends Requirement {
 		return this.credits;
 	}
 	public boolean isFulfilled() {
-		return this.fulfilled;
+		return super.isFulfilled();
 	}
 	@Override
 	public String getLabel() {
