@@ -78,7 +78,7 @@ public abstract class Requirement {
 				ret = true;
 		}
 		else
-			if(r.getSubject()==null && subject==null)
+			if(r.getLabel() != null && r.getLabel().equals(label) && r.getSubject()==null && subject==null)
 				ret=true;
 		return ret;
 	}
