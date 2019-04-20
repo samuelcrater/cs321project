@@ -41,52 +41,60 @@ public class Schedule {
 				noListBlock=true;
 				added=false;
 				Requirement reqNext = reqs.get(listCntr);
-				if(reqNext.getPrerequisiteFor()!=null)
+				if(reqNext.isFulfilled())
 				{
-					for(Requirement r:reqNext.getPrerequisiteFor())
-					{
-						for(Requirement listchk:reqs)
-						{
-							if(r.isEqual(listchk))
-							{
-								noListBlock=false;
-								break;
-							}
-						}
-						if(!noListBlock)
-							break;
-					}
+					addedAt=listCntr;
+					added=true;
+					break;
 				}
-				if(noListBlock)
+				else
 				{
 					if(reqNext.getPrerequisiteFor()!=null)
 					{
-						for(Requirement r :reqNext.getPrerequisiteFor())
+						for(Requirement r:reqNext.getPrerequisiteFor())
 						{
-							for(Requirement semChk : semesters.get(semesterCntr).getCourses())
+							for(Requirement listchk:reqs)
 							{
-								if(r.isEqual(semChk))
+								if(r.isEqual(listchk))
 								{
-									addable=false;
+									noListBlock=false;
 									break;
 								}
 							}
-
-							if(!addable)
+							if(!noListBlock)
 								break;
 						}
 					}
-					if(addable)
+					if(noListBlock)
 					{
-						added = semesters.get(semesterCntr).addCourse(reqNext);
-						if(added)
+						if(reqNext.getPrerequisiteFor()!=null)
 						{
-							addedAt=listCntr;
-							break;
+							for(Requirement r :reqNext.getPrerequisiteFor())
+							{
+								for(Requirement semChk : semesters.get(semesterCntr).getCourses())
+								{
+									if(r.isEqual(semChk))
+									{
+										addable=false;
+										break;
+									}
+								}
+
+								if(!addable)
+									break;
+							}
+						}
+						if(addable)
+						{
+							added = semesters.get(semesterCntr).addCourse(reqNext);
+							if(added)
+							{
+								addedAt=listCntr;
+								break;
+							}
 						}
 					}
 				}
-				
 			}
 			if(added)
 			{
@@ -123,52 +131,61 @@ public class Schedule {
 				noListBlock=true;
 				added=false;
 				Requirement reqNext = reqs.get(listCntr);
-				if(reqNext.getPrerequisiteFor()!=null)
+				if(reqNext.isFulfilled())
 				{
-					for(Requirement r:reqNext.getPrerequisiteFor())
-					{
-						for(Requirement listchk:reqs)
-						{
-							if(r.isEqual(listchk))
-							{
-								noListBlock=false;
-								break;
-							}
-						}
-						if(!noListBlock)
-							break;
-					}
+					addedAt=listCntr;
+					added=true;
+					break;
 				}
-				if(noListBlock)
+				else
 				{
 					if(reqNext.getPrerequisiteFor()!=null)
 					{
-						for(Requirement r :reqNext.getPrerequisiteFor())
+						for(Requirement r:reqNext.getPrerequisiteFor())
 						{
-							for(Requirement semChk : semesters.get(semesterCntr).getCourses())
+							for(Requirement listchk:reqs)
 							{
-								if(r.isEqual(semChk))
+								if(r.isEqual(listchk))
 								{
-									addable=false;
+									noListBlock=false;
 									break;
 								}
 							}
-
-							if(!addable)
+							if(!noListBlock)
 								break;
 						}
 					}
-					if(addable)
+					if(noListBlock)
 					{
-						added = semesters.get(semesterCntr).addCourse(reqNext);
-						if(added)
+						if(reqNext.getPrerequisiteFor()!=null)
 						{
-							addedAt=listCntr;
-							break;
+							for(Requirement r :reqNext.getPrerequisiteFor())
+							{
+								for(Requirement semChk : semesters.get(semesterCntr).getCourses())
+								{
+									if(r.isEqual(semChk))
+									{
+										addable=false;
+										break;
+									}
+								}
+
+								if(!addable)
+									break;
+							}
+						}
+						if(addable)
+						{
+							added = semesters.get(semesterCntr).addCourse(reqNext);
+							if(added)
+							{
+								addedAt=listCntr;
+								break;
+							}
 						}
 					}
+
 				}
-				
 			}
 			if(added)
 			{
@@ -512,6 +529,7 @@ public class Schedule {
 		j.addPrerequisiteFor(h);
 		j.addPrerequisiteFor(g);
 		ConcreteRequirement k = new ConcreteRequirement("k",11,"kk",1111,false);
+		k.setFulfilled(true);
 		ConcreteRequirement l = new ConcreteRequirement("l",12,"ll",1212,false);
 		ConcreteRequirement m = new ConcreteRequirement("m",13,"mm",1313,false);
 		ConcreteRequirement n = new ConcreteRequirement("n",14,"nn",1414,false);

@@ -1,5 +1,6 @@
 package cs321project;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,11 +9,9 @@ public class ScheduleController {
 	private FileHandler fileHandler;
 	private Degree degree;
 	private Schedule schedule;
-	
 	protected ScheduleController(String inputFilePath, String outputFilePath)
 	{
-		//TODO FileHandler constructor
-		//TODO Degree constructor
+		//Degree constructor handled in loadfile() method
 		fileHandler = new FileHandler(inputFilePath,outputFilePath);
 		schedule = new Schedule();
 	}
