@@ -14,14 +14,7 @@ public class Schedule {
 	 */
 	public void genSchedule(Degree d)
 	{
-		/*Methodology:
-		 * 	step through the degree's requirements, adding classes to semesters and removing from
-		 *  the arraylist until none are left. remove classes if they're already taken, or
-		 *  if they're successfully added to a semester. Throw to the end of the list otherwise.
-		 *  Add to a semester only if no classes exist in the arraylist that are unfufilled and
-		 *  prereqs for the class. If the semester fails to add a class because it's full, add a new
-		 *  semester
-		 */
+		
 		ArrayList<Requirement> reqs = new ArrayList<>();
 		for(Requirement k:d.getAdditionalSeniorCS())
 			reqs.add(k);
@@ -210,129 +203,171 @@ public class Schedule {
 	}
 	/*
 	 * Moves classes between semesters
+	 * returns:
+	 * 0-successful move
+	 * 1- start index <0
+	 * 2- start index greater than number of semesters
+	 * 3- stop index <0
+	 * 4- stop index greater than number of semesters
+	 * 5- class index <0
+	 * 6- class index greater than number of classes in it's semester
+	 * 7- destination semester full
+	 * 8- tried to add class to semester it's in
+	 * 9- trying to move a course back to/before a prerequisite
+	 * 10-trying to move a prerequisite to/past a class that needs it
 	 */
 	public int moveClass(int startIndex,int stopIndex, int classIndex)
 	{
 		int ret = 0;
 		//Make sure indices are valid
-		if(startIndex>=0&&startIndex<semesters.size()&&stopIndex<semesters.size()&&stopIndex>=0&&classIndex>=0&&classIndex<semesters.get(startIndex).getCourses().size())
+		//start semester is out of bounds
+		if(startIndex<0)
+			ret=1;
+		else if(startIndex>=semesters.size())
+			ret=2;
+		else
 		{
-			//Make sure the destination semester isn't full
-			if(semesters.get(stopIndex).getNumClasses()<5)
+			//stop semester is out of bounds
+			if(stopIndex<0)
+				ret=3;
+			else if (stopIndex>=semesters.size())
+				ret=4;
+			else
 			{
-				Requirement toMove = semesters.get(startIndex).getCourses().get(classIndex);
-				Boolean canAdd = true;
-				if(startIndex>stopIndex)
-				{	
-					/*
-					 * Go through from the destination to the end and make sure that it's not placed
-					 * before/with one of it's prerequisites
-					 */
-					for(int i=stopIndex;i<semesters.size();i++)
-					{
-						Semester se = semesters.get(i);
-						for(Requirement r:se.getCourses())
-						{
-							if(toMove.getPrerequisiteFor()!=null)
-							{
-								for(Requirement check:toMove.getPrerequisiteFor())
-								{
-									if(check.isEqual(r))
-									{
-										canAdd=false;
-										//tried to add a class to a semester before/with a prereq
-										ret=3;
-									}
-								}
-							}				
-						}
-					}
-				}
-				else if(startIndex<stopIndex)
-				{
-					/*
-					 * Go through from the start to the end and check that the class isn't placed
-					 * after/with one of the classes it's a prerequisite for
-					 */
-					for(int i=startIndex;i<stopIndex;i++)
-					{
-						Semester se = semesters.get(i);
-						
-						for(Requirement r:se.getCourses())
-						{
-							if(r.getPrerequisiteFor()!=null)
-							{
-								for(Requirement check:r.getPrerequisiteFor())
-								{
-									if(check.isEqual(toMove))
-									{
-										canAdd=false;
-										//tried to place a class with/past it's a prereq for
-										ret=4;
-									}
-								}				
-							}
-						}
-					}
-				}
-				//adding class to the same semester it's in
+				//class is out of bounds
+				if(classIndex<0)
+					ret=5;
+				else if(classIndex>=semesters.get(startIndex).getCourses().size())
+					ret=6;
 				else
 				{
-					canAdd=false;
-					ret=5;
-				}
-				if(canAdd)
-				{
-					Requirement test1 = semesters.get(startIndex).removeCourse(classIndex);
-					boolean test2 = semesters.get(stopIndex).addCourse(toMove);
-					
-					if(test1!=null)
-						System.out.println("Removed Sucessfully");
-					if(test2)
-						System.out.println("added sucessfully");
+					//Make sure the destination semester isn't full
+					if(semesters.get(stopIndex).getNumClasses()<5)
+					{
+						Requirement toMove = semesters.get(startIndex).getCourses().get(classIndex);
+						Boolean canAdd = true;
+						if(startIndex>stopIndex)
+						{	
+							/*
+							 * Go through from the destination to the end and make sure that it's not placed
+							 * before/with one of it's prerequisites
+							 */
+							for(int i=stopIndex;i<semesters.size();i++)
+							{
+								Semester se = semesters.get(i);
+								for(Requirement r:se.getCourses())
+								{
+									if(toMove.getPrerequisiteFor()!=null)
+									{
+										for(Requirement check:toMove.getPrerequisiteFor())
+										{
+											if(check.isEqual(r))
+											{
+												canAdd=false;
+												//tried to add a class to a semester before/with a prereq
+												ret=9;
+											}
+										}
+									}				
+								}
+							}
+						}
+						else if(startIndex<stopIndex)
+						{
+							/*
+							 * Go through from the start to the end and check that the class isn't placed
+							 * after/with one of the classes it's a prerequisite for
+							 */
+							for(int i=startIndex;i<=stopIndex;i++)
+							{
+								Semester se = semesters.get(i);
+								
+								for(Requirement r:se.getCourses())
+								{
+									if(r.getPrerequisiteFor()!=null)
+									{
+										for(Requirement check:r.getPrerequisiteFor())
+										{
+											if(check.isEqual(toMove))
+											{
+												canAdd=false;
+												//tried to place a class with/past it's a prereq for
+												ret=10;
+											}
+										}				
+									}
+								}
+							}
+						}
+						//adding class to the same semester it's in
+						else
+						{
+							canAdd=false;
+							ret=8;
+						}
+						if(canAdd)
+						{
+							Requirement test1 = semesters.get(startIndex).removeCourse(classIndex);
+							boolean test2 = semesters.get(stopIndex).addCourse(toMove);
+							
+							if(test1==null)
+								System.out.println("Remove Failed");
+							if(!test2)
+								System.out.println("add failed");
+						}
+					}
+					//Destination semester full
+					else
+						ret=7;
 				}
 			}
-			//Destination semester full
-			else
-				ret=2;
 		}
-		//Indices out of bounds
-		else
-			ret=1;
 		return ret;
 	}
 	/*
 	 * Swaps 2 courses between semesters
 	 * returns:
 	 * 0- successful swap
-	 * 1- semester 1 is out of bounds
-	 * 2- semester 2 is out of bounds
-	 * 3- course1 is out of bounds
-	 * 4- course2 is out of bounds
-	 * 5- trying to move a course back to/before a prerequisite
-	 * 6- trying to move a prerequisite to/past a class that needs it
+	 * 1- semester 1 is less than 0
+	 * 2- semester 1 is greater than the number of semesters
+	 * 3- semester 2 is less than 0
+	 * 4- semester 2 is greater than the number of semesters
+	 * 5- course 1 is less than 0
+	 * 6- course 1 is greater than the number of classes in it's semester
+	 * 7- course 2 is less than 0
+	 * 8- course 2 is greater than the number of classes in it's semester
+	 * 9- trying to move a course back to/before a prerequisite
+	 * 10- trying to move a prerequisite to/past a class that needs it
 	 */
-	public int swapCourse(int course1,int semester1, int course2, int semester2)
+	public int swapClass(int course1,int semester1, int course2, int semester2)
 	{
 		int ret = 0;
 		//Semester 1 is out of bounds
-		if(semester1<0||semester1>=semesters.size())
+		if(semester1<0)
 			ret=1;
+		else if(semester1>=semesters.size())
+			ret=2;
 		else
 		{
 			//Semester 2 is out of bounds
-			if(semester2<0||semester2>=semesters.size())
-				ret=2;
+			if(semester2<0)
+				ret=3;
+			else if (semester2>=semesters.size())
+				ret=4;
 			else
 			{
 				//Course 1 is out of bounds
-				if(course1<0 || course1>=semesters.get(semester1).getCourses().size())
-					ret=3;
+				if(course1<0)
+					ret=5;
+				else if(course1>=semesters.get(semester1).getCourses().size())
+					ret=6;
 				else
 				{
 					//Course 2 is out of bounds
-					if(course2<0||course2 >=semesters.get(semester2).getCourses().size())
-						ret=4;
+					if(course2<0)
+						ret=7;
+					else if(course2 >=semesters.get(semester2).getCourses().size())
+						ret = 8;
 					else
 					{
 						//Check for the same semester
@@ -359,35 +394,37 @@ public class Schedule {
 												if(chk.isEqual(mvChk))
 												{
 													canMove=false;
-													ret = 5;
+													ret = 9;
 												}
 											}
 										}
 									}
 								}
-								
-								for(int i = semester2;i<= semester1;i++)
-								{
-									for(Requirement r:semesters.get(i).getCourses())
+								if(canMove)
+								{	
+									for(int i = semester2;i<= semester1;i++)
 									{
-										if(r.getPrerequisiteFor()!=null)
+										for(Requirement r:semesters.get(i).getCourses())
 										{
-											for(Requirement chk:r.getPrerequisiteFor())
+											if(r.getPrerequisiteFor()!=null)
 											{
-												if(chk.isEqual(move2))
+												for(Requirement chk:r.getPrerequisiteFor())
 												{
-													canMove=false;
-													ret=6;
+													if(chk.isEqual(move2))
+													{
+														canMove=false;
+														ret=10;
+													}
 												}
 											}
 										}
 									}
+
 								}
 								
 							}
 							else
 							{
-								
 								for(int i = semester1;i<=semester2;i++)
 								{
 									for(Requirement r:semesters.get(i).getCourses())
@@ -399,34 +436,39 @@ public class Schedule {
 												if(mvChk.isEqual(move1))
 												{
 													canMove=false;
-													ret = 6;
+													ret = 10;
 												}
 											}
 										}
 									}
 								}
-								if(move2.getPrerequisiteFor()!=null)
+								
+								if(canMove)
 								{
-									for(int i=semester1;i<semester2;i++)
+									if(move2.getPrerequisiteFor()!=null)
 									{
-										for(Requirement r:semesters.get(i).getCourses())
+										for(int i=semester1;i<=semester2;i++)
 										{
-											for(Requirement mvChk:move2.getPrerequisiteFor())
+											for(Requirement r:semesters.get(i).getCourses())
 											{
-												if(r.isEqual(mvChk))
+												for(Requirement mvChk:move2.getPrerequisiteFor())
 												{
-													canMove=false;
-													ret=5;
+													if(r.isEqual(mvChk))
+													{
+														canMove=false;
+														ret=9;
+													}
 												}
 											}
 										}
 									}
 								}
+								
 							}
 							if(canMove)
 							{
-								 semesters.get(semester1).getCourses().remove(course1);
-								 semesters.get(semester2).getCourses().remove(course2);
+								 semesters.get(semester1).removeCourse(course1);
+								 semesters.get(semester2).removeCourse(course2);
 								 boolean test1 = semesters.get(semester1).addCourse(move2);
 								 boolean test2 = semesters.get(semester2).addCourse(move1);
 								 if(!test1)
@@ -528,21 +570,60 @@ public class Schedule {
 			reqCntr=0;
 		}
 		output=null;
-		int[] results = new int[10];
-		results[0]=sched.moveClass(8, 8, 0);
-		System.out.println(results[0]);
-		results[1]=sched.moveClass(0, 1, 0);
-		System.out.println(results[1]);
-		results[2]=sched.moveClass(0, 8, 0);
-		System.out.println(results[2]);
-		results[3]=sched.moveClass(8, 7, 0);
-		System.out.println(results[3]);
-		results[4]=sched.moveClass(8, 0, 0);
-		System.out.println(results[4]);
-		results[5]=sched.moveClass(0, 8, 4);
-		System.out.println(results[5]);
-		results[6]=sched.moveClass(8, 0, 1);
-		System.out.println(results[6]);
+		ArrayList<Integer> results = new ArrayList<>();
+		results.add(sched.moveClass(0, 7, 1));
+		results.add(sched.moveClass(-1, 0, 0));
+		results.add(sched.moveClass(8, 8, 0));
+		results.add(sched.moveClass(7, -1, 0));
+		results.add(sched.moveClass(7, 8, 0));
+		results.add(sched.moveClass(0, 7, -1));
+		results.add(sched.moveClass(0, 7, 6));
+		results.add(sched.moveClass(0, 1, 1));
+		results.add(sched.moveClass(0, 0, 0));
+		//test 9 and 10 twice
+		results.add(sched.moveClass(7, 6, 0));
+		results.add(sched.moveClass(7, 5, 0));
+		
+		results.add(sched.moveClass(5, 7, 0));
+		results.add(sched.moveClass(6, 7, 0));
+		
+		for(Integer moveRet: results)
+		{
+			System.out.println(moveRet);
+		}
+		output = sched.getScheudle();
+		symCntr=0;
+		reqCntr=0;
+		for(Semester se:output)
+		{
+			symCntr++;
+			System.out.println("Semester "+symCntr+":\n");
+			for(Requirement req:se.getCourses())
+			{
+				reqCntr++;
+				System.out.println("Course "+reqCntr+": "+req.getSubject()+" "+req.getNumber()+" "+req.getLabel()+"\n");
+			}
+			reqCntr=0;
+		}
+		results.clear();
+		results.add(sched.swapClass(1,0,1,7));
+		results.add(sched.swapClass(1,-1,1,7));
+		results.add(sched.swapClass(1,8,1,7));
+		results.add(sched.swapClass(1,0,1,-1));
+		results.add(sched.swapClass(1,0,1,8));
+		results.add(sched.swapClass(-1,0,1,7));
+		results.add(sched.swapClass(5,0,1,7));
+		results.add(sched.swapClass(1,0,-1,7));
+		results.add(sched.swapClass(1,0,3,7));
+		//test 9&10 twice
+		results.add(sched.swapClass(0,7,1,0));
+		results.add(sched.swapClass(0,7,0,6));
+		
+		results.add(sched.swapClass(0,0,1,7));
+		results.add(sched.swapClass(0,0,1,1));
+		for(Integer swapRet:results)
+			System.out.println(swapRet);
+		
 		output = sched.getScheudle();
 		symCntr=0;
 		reqCntr=0;
