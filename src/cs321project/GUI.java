@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -109,14 +111,24 @@ public class GUI extends JFrame {
 		this.setJMenuBar(menuBar);
     }
     
-    public void updateDegree(ArrayList<Requirement> requirements) {
-    	for (Requirement r : requirements) {
-    		
-    	}
+    public void updateDegree(HashMap<String, ArrayList<Requirement>> requirements) {
+    	reqView.populate(requirements);
     }
     
     public static void main(String[] args) {
 		GUI gui = new GUI();
 		gui.display();
+		
+		HashMap<String, ArrayList<Requirement>> tester = new HashMap<String, ArrayList<Requirement>>();
+		ArrayList<Requirement> temp = new ArrayList<Requirement>();
+		temp.add(new AbstractRequirement("Oral Communication", false, 0));
+		temp.add(new AbstractRequirement("Quantitative Reasoning", false, 0));
+		tester.put("University Foundation", temp);
+		temp = new ArrayList<Requirement>();
+		temp.add(new AbstractRequirement("Literature", true, 0));
+		temp.add(new AbstractRequirement("Arts", false, 0));
+		tester.put("University Core", temp);
+		
+		gui.updateDegree(tester);
 	}
 }
