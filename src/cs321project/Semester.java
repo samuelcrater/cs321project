@@ -5,7 +5,7 @@ public class Semester {
 
 	private ArrayList<Requirement> courses;
 	private int numClasses;
-	private final int MAXCLASSES = 5;
+	private final int MAXCLASSES = 6;
 	
 	public Semester() {
 		courses = new ArrayList<>();
