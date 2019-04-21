@@ -51,7 +51,7 @@ public class Semester {
 	public Requirement removeCourse(int i)
 	{
 		Requirement ret = null;
-		if(i>0&&i<numClasses)
+		if(i>=0&&i<numClasses)
 		{
 			ret = courses.remove(i);
 			numClasses--;

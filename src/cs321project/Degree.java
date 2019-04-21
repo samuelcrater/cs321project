@@ -46,4 +46,8 @@ public class Degree {
 	public void fulfillRequirement(int index) {
 		this.requirements.get(index).setFulfilled(true);
 	}
+	public String getCatalog()
+	{
+		return catalog;
+	}
 }
