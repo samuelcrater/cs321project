@@ -22,18 +22,42 @@ public class Schedule {
 		ArrayList<Requirement> adds = new ArrayList<>();
 		ArrayList<Requirement> tooMuch = new ArrayList<>();
 		ArrayList<Requirement> stillTooMuch = new ArrayList<>();
+		ArrayList<Requirement> anotherSorter = new ArrayList<>();
+		ArrayList<Requirement> thanksCS = new ArrayList<>();
 		for(Requirement k:d.getMajorInComputerScience())
 			tooMuch.add(k);
-		for(int cntr = 0;cntr<11;cntr++)
+		anotherSorter.add(tooMuch.remove(2));
+		anotherSorter.add(tooMuch.remove(3));
+		for(int cntr = 0;cntr<12;cntr++)
 			stillTooMuch.add(tooMuch.remove(7));
-		for(Requirement k : tooMuch)
-			adds.add(k);
-		lists.add(adds);
-		adds = new ArrayList<Requirement>();
+		for(int i=0;i<stillTooMuch.size();i++)
+			if(i%2==0)
+				thanksCS.add(stillTooMuch.get(i));
+		for(Requirement k:thanksCS)
+		{
+			for(int i=stillTooMuch.size()-1;i>=0;i--)
+			{
+				if(k.isEqual(stillTooMuch.get(i)))
+					stillTooMuch.remove(i);
+			}
+		}
 		for(Requirement k : stillTooMuch)
 			adds.add(k);
 		lists.add(adds);
 		adds = new ArrayList<Requirement>();
+		for(Requirement k : thanksCS)
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k :anotherSorter)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<>();
+		for(Requirement k : tooMuch)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<Requirement>();
+		
 		for(Requirement k:d.getUniversityCore())
 			adds.add(k);
 		lists.add(adds);
@@ -50,9 +74,21 @@ public class Schedule {
 			adds.add(k);
 		lists.add(adds);
 		adds = new ArrayList<Requirement>();
-		int rand = (((int)Math.random())*10)%3;
-		adds.add(d.getSeniorCSOneElective().get(rand));
-		lists.add(adds);
+		boolean pickOne=false;
+		for(Requirement one:d.getSeniorCSOneElective())
+		{
+			if(one.isFulfilled())
+			{
+				pickOne=true;
+				break;
+			}
+		}
+		if(!pickOne)
+		{
+			int rand = ((int)(Math.random()*10.0))%3;
+			adds.add(d.getSeniorCSOneElective().get(rand));
+			lists.add(adds);
+		}
 		while(!lists.isEmpty())
 		{
 			for(ArrayList<Requirement>k:lists)
