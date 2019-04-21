@@ -26,38 +26,75 @@ public class Schedule {
 		ArrayList<Requirement> thanksCS = new ArrayList<>();
 		for(Requirement k:d.getMajorInComputerScience())
 			tooMuch.add(k);
-		anotherSorter.add(tooMuch.remove(2));
-		anotherSorter.add(tooMuch.remove(3));
-		for(int cntr = 0;cntr<12;cntr++)
-			stillTooMuch.add(tooMuch.remove(7));
-		for(int i=0;i<stillTooMuch.size();i++)
-			if(i%2==0)
-				thanksCS.add(stillTooMuch.get(i));
-		for(Requirement k:thanksCS)
+		String catalog = d.getCatalog();
+		if(catalog.contentEquals("2016 CS BS"))
 		{
-			for(int i=stillTooMuch.size()-1;i>=0;i--)
+			anotherSorter.add(tooMuch.remove(2));
+			anotherSorter.add(tooMuch.remove(3));
+			for(int cntr = 0;cntr<12;cntr++)
+				stillTooMuch.add(tooMuch.remove(7));
+			for(int i=0;i<stillTooMuch.size();i++)
+				if(i%2==0)
+					thanksCS.add(stillTooMuch.get(i));
+			for(Requirement k:thanksCS)
 			{
-				if(k.isEqual(stillTooMuch.get(i)))
-					stillTooMuch.remove(i);
+				for(int i=stillTooMuch.size()-1;i>=0;i--)
+				{
+					if(k.isEqual(stillTooMuch.get(i)))
+						stillTooMuch.remove(i);
+				}
 			}
+			for(Requirement k : stillTooMuch)
+				adds.add(k);
+			lists.add(adds);
+			adds = new ArrayList<Requirement>();
+			for(Requirement k : thanksCS)
+				adds.add(k);
+			lists.add(adds);
+			adds = new ArrayList<Requirement>();
+			for(Requirement k :anotherSorter)
+				adds.add(k);
+			lists.add(adds);
+			adds=new ArrayList<>();
+			for(Requirement k : tooMuch)
+				adds.add(k);
+			lists.add(adds);
+			adds=new ArrayList<Requirement>();
 		}
-		for(Requirement k : stillTooMuch)
-			adds.add(k);
-		lists.add(adds);
-		adds = new ArrayList<Requirement>();
-		for(Requirement k : thanksCS)
-			adds.add(k);
-		lists.add(adds);
-		adds = new ArrayList<Requirement>();
-		for(Requirement k :anotherSorter)
-			adds.add(k);
-		lists.add(adds);
-		adds=new ArrayList<>();
-		for(Requirement k : tooMuch)
-			adds.add(k);
-		lists.add(adds);
-		adds=new ArrayList<Requirement>();
-		
+		else
+		{
+			anotherSorter.add(tooMuch.remove(2));
+			anotherSorter.add(tooMuch.remove(3));
+			for(int cntr = 0;cntr<11;cntr++)
+				stillTooMuch.add(tooMuch.remove(6));
+			for(int i=0;i<stillTooMuch.size();i++)
+				if(i%2==0)
+					thanksCS.add(stillTooMuch.get(i));
+			for(Requirement k:thanksCS)
+			{
+				for(int i=stillTooMuch.size()-1;i>=0;i--)
+				{
+					if(k.isEqual(stillTooMuch.get(i)))
+						stillTooMuch.remove(i);
+				}
+			}
+			for(Requirement k : stillTooMuch)
+				adds.add(k);
+			lists.add(adds);
+			adds = new ArrayList<Requirement>();
+			for(Requirement k : thanksCS)
+				adds.add(k);
+			lists.add(adds);
+			adds = new ArrayList<Requirement>();
+			for(Requirement k :anotherSorter)
+				adds.add(k);
+			lists.add(adds);
+			adds=new ArrayList<>();
+			for(Requirement k : tooMuch)
+				adds.add(k);
+			lists.add(adds);
+			adds=new ArrayList<Requirement>();
+		}
 		for(Requirement k:d.getUniversityCore())
 			adds.add(k);
 		lists.add(adds);

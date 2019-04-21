@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class Main {
 
-	public static final String INPUT_FILE = "DegreeRequirements2.txt";
+	public static final String INPUT_FILE = "DegreeRequirements20192020.txt";
 	public static final String OUTPUT_FILE = "output.txt";
 	
 	public static void main(String[] args) {

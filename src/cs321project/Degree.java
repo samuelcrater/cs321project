@@ -7,9 +7,14 @@ public class Degree {
 
 	private ArrayList<Requirement> requirements;
 	private HashMap<String, ArrayList<Requirement>> allRequirements;
+	private String catalog;
 	FileHandler handler;
 	
 	public Degree() {
+		this.requirements = new ArrayList<>();
+	}
+	public Degree(String catalog) {
+		this.catalog = catalog;
 		this.requirements = new ArrayList<>();
 	}
 	//be careful with this!
@@ -40,5 +45,9 @@ public class Degree {
 	}
 	public void fulfillRequirement(int index) {
 		this.requirements.get(index).setFulfilled(true);
+	}
+	public String getCatalog()
+	{
+		return catalog;
 	}
 }
