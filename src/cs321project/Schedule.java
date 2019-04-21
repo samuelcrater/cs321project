@@ -407,7 +407,7 @@ public class Schedule {
 							boolean test2 = semesters.get(stopIndex).addCourse(toMove);
 							
 							if(test1==null)
-								System.out.println("Remove Failed");
+								System.out.println("Remove Failed, get("+startIndex+").removeCourse("+classIndex+") returned Null");
 							if(!test2)
 								System.out.println("add failed");
 						}
