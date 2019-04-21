@@ -10,6 +10,9 @@ public class FileHandler {
 	private PrintWriter printWriter;
 	private String inputFile;
 	private String outputFile;
+	private String degreeCatalogYear;
+	private int CS310Index;
+	private int CS367Index;
 
 	public FileHandler(String inputFile, String outputFile) {
 		this.inputFile = inputFile;
@@ -24,8 +27,8 @@ public class FileHandler {
 	}
 
 	public Degree getDegree() throws IOException {
-		Degree degree = new Degree();
 		getCourseReqs();
+		Degree degree = new Degree(degreeCatalogYear);
 		degree.setHashTable(categories);
 
 		return degree;
@@ -40,9 +43,16 @@ public class FileHandler {
 		categories = new HashMap<String, ArrayList<Requirement>>();
 		String currentCategory = "University Core";
 		String nextCategory = "Computer Science Department";
-
-		// set up very first category
+		
+		
 		String readLine = br.readLine();
+		CS310Index = Integer.parseInt(readLine);
+		readLine = br.readLine();
+		CS367Index = Integer.parseInt(readLine);
+		readLine = br.readLine();
+		degreeCatalogYear = readLine;
+		// set up very first category
+		readLine = br.readLine();
 		categories.put(readLine, new ArrayList<Requirement>());
 		// didnt want a bunch of while loops, using function calls instead
 		setCategories(currentCategory, nextCategory);
@@ -167,10 +177,10 @@ public class FileHandler {
 					getCurrentCategory.add(req);
 					Requirement prereq;
 					if (currentCategory.equals("Senior CS, Additional")) {
-						prereq = categories.get("Major in Computer Science").get(18);
+						prereq = categories.get("Major in Computer Science").get(CS367Index);
 						req.addPrerequisiteFor(prereq);// dont really need a loop for this
 					} else { // we have cs Related
-						prereq = categories.get("Major in Computer Science").get(15);
+						prereq = categories.get("Major in Computer Science").get(CS310Index);
 						req.addPrerequisiteFor(prereq);// dont really need a loop for this
 					}
 
@@ -281,6 +291,9 @@ public class FileHandler {
 	public void saveSchedule() {
 		try {
 			printWriter = new PrintWriter(new FileWriter(outputFile));
+			printWriter.printf("%d%n", CS310Index);
+			printWriter.printf("%d%n", CS367Index);
+			printWriter.printf("%s%n", degreeCatalogYear);
 			writeAbstract("University Core");
 			writeAbstractScience("Computer Science Department");
 			writeConcrete("Major in Computer Science");
@@ -403,7 +416,7 @@ public class FileHandler {
 				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements2.txt",
 				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
-			test.getCourseReqs();
+			Degree degree = test.getDegree();
 			test.saveSchedule();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
