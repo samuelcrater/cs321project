@@ -25,7 +25,7 @@ public class Schedule {
 		for(Requirement k:d.getMajorInComputerScience())
 			tooMuch.add(k);
 		for(int cntr = 0;cntr<11;cntr++)
-			stillTooMuch.add(tooMuch.remove(7));
+			stillTooMuch.add(tooMuch.remove(9));
 		for(Requirement k : tooMuch)
 			adds.add(k);
 		lists.add(adds);
@@ -50,7 +50,7 @@ public class Schedule {
 			adds.add(k);
 		lists.add(adds);
 		adds = new ArrayList<Requirement>();
-		int rand = (((int)Math.random())*10)%3;
+		int rand = ((int)(Math.random()*10.0))%3;
 		adds.add(d.getSeniorCSOneElective().get(rand));
 		lists.add(adds);
 		while(!lists.isEmpty())
