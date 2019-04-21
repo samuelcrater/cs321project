@@ -7,9 +7,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,12 +20,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class GUI extends JFrame {
 
-	private JMenuBar menuBar;
-	private JMenu fileMenu;
-	private JMenuItem menuItem;
+	private static final long serialVersionUID = 3295797573163548533L;
 	private RequirementsView reqView;
 	private ScheduleView schedView;
-	
 	private ScheduleController sc;
 	
 	public GUI() {
@@ -41,9 +37,10 @@ public class GUI extends JFrame {
 		this.createMenuBar();
 		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
+		this.add(Box.createRigidArea(new Dimension(5, 0)));
+		
 		reqView = new RequirementsView();
 		this.add(reqView);
-		//this.add(Box.createRigidArea(new Dimension(5, 0))); //optional padding
 		schedView = new ScheduleView();
 		this.add(schedView);
 		
@@ -55,22 +52,19 @@ public class GUI extends JFrame {
 	}
     
     private void createMenuBar() {
-    	menuBar = new JMenuBar();
-		fileMenu = new JMenu("File");
+    	JMenuBar menuBar = new JMenuBar();
+    	JMenu fileMenu = new JMenu("File");
 		menuBar.add(fileMenu);
 		
-		menuItem = new JMenuItem("New");
+		JMenuItem menuItem = new JMenuItem("New");
 		menuItem.setPreferredSize(new Dimension(150, menuItem.getPreferredSize().height));
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
 		menuItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//dummy action
-				setSize(900,700);
+				sc.generateSchedule();
 			}
-			
 		});
 		fileMenu.add(menuItem);
 		
@@ -79,17 +73,13 @@ public class GUI extends JFrame {
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
 		menuItem.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//dummy action
-				//setSize(900,700);
 				FileDialog dialog = new FileDialog((Frame)null, "Select File");
 			    //dialog.setMode(FileDialog.LOAD);
 			    dialog.setVisible(true);
 			    sc.getFile(dialog.getFile());
 			}
-			
 		});
 		fileMenu.add(menuItem);
 		
@@ -127,7 +117,6 @@ public class GUI extends JFrame {
     }
     
     public void updateSchedule(ArrayList<Semester> semesters) {
-    	//System.out.println("Semester count: " + semesters.size());
     	schedView.populate(semesters);
     	this.pack();
     }

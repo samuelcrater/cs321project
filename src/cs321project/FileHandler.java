@@ -312,11 +312,11 @@ public class FileHandler {
 	public void saveSemesters(ArrayList<Semester> semesters) {
 		for(int i = 0; i < semesters.size(); i++) {
 			Semester currentSemester = semesters.get(i);
-			printWriter.printf("Semester %d:%n", i);
+			printWriter.printf("Semester %d:%n", i + 1);
 			ArrayList<Requirement> coursesForCurrentSemester = currentSemester.getCourses();
 			for(int j = 0; j < coursesForCurrentSemester.size(); j++) {
 				Requirement temp = coursesForCurrentSemester.get(j);
-				printWriter.printf("\t%s%d:%n", temp.getSubject(), temp.getNumber());
+				printWriter.printf("\t%s\n", temp.getLabel());
 			}
 		}
 	}

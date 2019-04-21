@@ -1,16 +1,11 @@
 package cs321project;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import javax.swing.Box;
@@ -23,34 +18,34 @@ import javax.swing.JScrollPane;
 
 public class RequirementsView extends JPanel {
 
-	private ScheduleController sc;
-	private Degree degree;
-	
+	private static final long serialVersionUID = -8184697493125918694L;
 	private JLabel degreeLabel;
 	private JScrollPane interiorScroller;
 	private JPanel interior;
 	private JButton generateButton;
 	
+	private ScheduleController sc;
+	
 	public RequirementsView() {
 		this.setPreferredSize(new Dimension(250,550));
 		this.setMaximumSize(new Dimension(250,550));
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		
 		degreeLabel = new JLabel();
 		degreeLabel.setFont(new Font(degreeLabel.getFont().getName(), Font.PLAIN, 30));
 		degreeLabel.setAlignmentX(CENTER_ALIGNMENT);
 		this.add(degreeLabel);
+		
 		JLabel reqLabel = new JLabel("Requirements");
 		reqLabel.setFont(new Font(reqLabel.getFont().getName(), Font.PLAIN, 30));
 		reqLabel.setAlignmentX(CENTER_ALIGNMENT);
 		this.add(reqLabel);
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
-		//panel
 		interior = new JPanel();
 		interiorScroller = new JScrollPane(interior);
+		interiorScroller.getVerticalScrollBar().setUnitIncrement(20);
 		this.add(interiorScroller);
 		
-		//button
 		generateButton = new JButton("Generate Schedule");
 		generateButton.setAlignmentX(CENTER_ALIGNMENT);
 		generateButton.addActionListener(new ActionListener() {
@@ -68,11 +63,10 @@ public class RequirementsView extends JPanel {
 		
 		Set<String> keys = requirements.keySet();
     	for (String s : keys) {
-    		//JPanel row = new JPanel();
-    		//row.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-    		JLabel temp = new JLabel(s);
-    		temp.setFont(new Font(temp.getFont().getName(), Font.PLAIN, 15));
-    		this.interior.add(temp);
+    		JLabel section = new JLabel(s);
+    		section.setFont(new Font(section.getFont().getName(), Font.PLAIN, 15));
+    		this.interior.add(section);
+    		
     		for (Requirement r : requirements.get(s)) {
     			JPanel row = new JPanel();
         		row.setLayout(new BoxLayout(row, BoxLayout.LINE_AXIS));
