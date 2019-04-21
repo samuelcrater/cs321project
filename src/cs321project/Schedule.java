@@ -14,7 +14,8 @@ public class Schedule {
 	 */
 	public void genSchedule(Degree d)
 	{
-		
+		semesters= new ArrayList<>();
+		semesters.add(new Semester());
 		ArrayList<Requirement> reqs = new ArrayList<>();
 		for(Requirement k:d.getAdditionalSeniorCS())
 			reqs.add(k);
@@ -28,6 +29,7 @@ public class Schedule {
 			reqs.add(k);
 		for(Requirement k:d.getUniversityCore())
 			reqs.add(k);
+		Collections.shuffle(reqs);
 		int semesterCntr=0;
 		int addedAt=-1;
 		while(!reqs.isEmpty())
@@ -115,9 +117,12 @@ public class Schedule {
 	 */
 	public void genSchedule(ArrayList<Requirement>c)
 	{
+		semesters= new ArrayList<>();
+		semesters.add(new Semester());
 		ArrayList<Requirement> reqs = new ArrayList<>();
 		for(Requirement r:c)
 			reqs.add(r);
+		Collections.shuffle(reqs);
 		int semesterCntr=0;
 		int addedAt=-1;
 		while(!reqs.isEmpty())
