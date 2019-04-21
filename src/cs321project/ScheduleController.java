@@ -63,6 +63,7 @@ public class ScheduleController {
 	protected int moveCourse(int courseIndex, int semesterStart, int semesterDest) {
 		int ret=-1;
 		ret = schedule.moveClass(semesterStart, semesterDest, courseIndex);
+		gui.updateSchedule(schedule.getScheudle());
 		return ret;
 	}
 	/*
@@ -84,6 +85,7 @@ public class ScheduleController {
 	protected int swapCourse(int c1, int s1, int c2, int s2) {
 		int ret = -1;
 		schedule.swapClass(c1,s1,c2,s2);
+		gui.updateSchedule(schedule.getScheudle());
 		return ret;
 	}
 }

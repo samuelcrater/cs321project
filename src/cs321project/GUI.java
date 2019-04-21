@@ -109,6 +109,7 @@ public class GUI extends JFrame {
     public void setScheduleController(ScheduleController sc) {
     	this.sc = sc;
     	reqView.setScheduleController(sc);
+    	schedView.setScheduleController(sc);
     }
     
 	//must be called after initialized
