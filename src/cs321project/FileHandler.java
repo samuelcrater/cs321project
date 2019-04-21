@@ -22,14 +22,16 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
+
 	public Degree getDegree() throws IOException {
 		Degree degree = new Degree();
 		getCourseReqs();
 		degree.setHashTable(categories);
-		
+
 		return degree;
 	}
-	//HashMap<String, ArrayList<Requirement>>
+
+	// HashMap<String, ArrayList<Requirement>>
 	private void getCourseReqs() throws IOException {
 		// e.g. when you hit "University Foundation" in the input file, do
 		// hashMap.add("University Foundation", new ArrayList<Requirement>());
@@ -46,25 +48,63 @@ public class FileHandler {
 		setCategories(currentCategory, nextCategory);
 		currentCategory = "Computer Science Department";
 		nextCategory = "Major in Computer Science";
-		setCategories(currentCategory, nextCategory);
+		abstractScience(currentCategory, nextCategory);
 		currentCategory = "Major in Computer Science";
 		nextCategory = "Senior CS, Elective One of:";
-		readAllCourses(currentCategory, nextCategory);//reading majority of concrete requirements
+		readAllCourses(currentCategory, nextCategory);// reading majority of concrete requirements
 		currentCategory = "Senior CS, Elective One of:";
 		nextCategory = "Senior CS, Additional";
-		readAllCourses(currentCategory, nextCategory);//another three concrete requirements
+		readAllCourses(currentCategory, nextCategory);// another three concrete requirements
 		currentCategory = "Senior CS, Additional";
 		nextCategory = "CS-Related Courses";
-		setCategories(currentCategory, nextCategory);
+		abstractCSSeniorAndRelated(currentCategory, nextCategory);
 		currentCategory = "CS-Related Courses";
 		nextCategory = null;
-		setCategories(currentCategory, nextCategory);
+		abstractCSSeniorAndRelated(currentCategory, nextCategory);
 		br.close();
 
-		//return categories;
+		// return categories;
 	}
 
 	private void setCategories(String currentCategory, String nextCategory) {
+		String readLine;
+		String parseLine[] = null;
+		try {
+			ArrayList<Requirement> getCurrentCategory = categories.get(currentCategory);
+			// while loop for first set of reqs
+			while ((readLine = br.readLine()) != null) {
+				parseLine = readLine.split("_"); // important info is separated by _ in the txt file
+				if (parseLine[0].equals(nextCategory)) {
+					break;
+				} else {// we have a regular abstract requirement
+					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+							Integer.parseInt(parseLine[2])));
+				}
+
+			}
+
+			// making sure we aren't overriding an existing category
+			if (nextCategory != null) {
+				// setting up next category
+				categories.put(parseLine[0], new ArrayList<Requirement>());
+			}
+
+			// we have a category that just has credits associated with it and nothing else,
+			// ie Social Sciences and Humanities. Going to
+			// add this as both its own category and an abstract requirement
+			/*
+			 * if (parseLine.length >= 3) { categories.get(parseLine[0]).add(new
+			 * AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+			 * Integer.parseInt(parseLine[2]))); }
+			 */
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void abstractScience(String currentCategory, String nextCategory) {
 		String readLine;
 		String parseLine[] = null;
 		try {
@@ -81,27 +121,68 @@ public class FileHandler {
 					getCurrentCategory.add(new ConcreteRequirement(parseLine[0], Integer.parseInt(parseLine[1]),
 							parseLine[2], Integer.parseInt(parseLine[4]), Boolean.parseBoolean(parseLine[3])));
 
-				} else {// we have a regular abstract requirement
-					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]), Integer.parseInt(parseLine[2])));
+				}
+				// dealing with just the science requirements.
+				else if (parseLine.length < 4) {
+					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+							Integer.parseInt(parseLine[2])));
+				} else {
+					Requirement req = new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+							Integer.parseInt(parseLine[2]));
+					getCurrentCategory.add(req);
+					req.addPrerequisiteFor(getCurrentCategory.get(1));// dont really need a loop for this
 				}
 
 			}
-			
-			//making sure we aren't overriding an existing category
-			if(nextCategory != null) {
+
+			// making sure we aren't overriding an existing category
+			if (nextCategory != null) {
 				// setting up next category
 				categories.put(parseLine[0], new ArrayList<Requirement>());
 			}
-			
-			// we have a category that just has credits associated with it and nothing else,
-			// ie Social Sciences and Humanities. Going to
-			// add this as both its own category and an abstract requirement
-			/*
-			 * if (parseLine.length >= 3) { categories.get(parseLine[0]).add(new
-			 * AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
-			 * Integer.parseInt(parseLine[2]))); }
-			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	private void abstractCSSeniorAndRelated(String currentCategory, String nextCategory) {
+		String readLine;
+		String parseLine[] = null;
+		try {
+			ArrayList<Requirement> getCurrentCategory = categories.get(currentCategory);
+			// while loop for first set of reqs
+			while ((readLine = br.readLine()) != null) {
+				parseLine = readLine.split("_"); // important info is separated by _ in the txt file
+				if (parseLine[0].equals(nextCategory)) {
+					break;
+				}
+				// dealing with just the science requirements.
+				else if (parseLine.length < 5) {
+					getCurrentCategory.add(new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+							Integer.parseInt(parseLine[2])));
+				} else {
+					Requirement req = new AbstractRequirement(parseLine[0], Boolean.parseBoolean(parseLine[1]),
+							Integer.parseInt(parseLine[2]));
+					getCurrentCategory.add(req);
+					Requirement prereq;
+					if (currentCategory.equals("Senior CS, Additional")) {
+						prereq = categories.get("Major in Computer Science").get(18);
+						req.addPrerequisiteFor(prereq);// dont really need a loop for this
+					} else { // we have cs Related
+						prereq = categories.get("Major in Computer Science").get(15);
+						req.addPrerequisiteFor(prereq);// dont really need a loop for this
+					}
+
+				}
+
+			}
+
+			// making sure we aren't overriding an existing category
+			if (nextCategory != null) {
+				// setting up next category
+				categories.put(parseLine[0], new ArrayList<Requirement>());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,10 +194,11 @@ public class FileHandler {
 		String currentCourse; // we're using this to read through our txt file full of courses line by line
 		try {
 			ArrayList<Requirement> majorInCompSci = categories.get("Major in Computer Science");
-			//noticed that the category of "Senior CS, ..." all of its concrete requirements were missing their
-			//prereqs.  Still need the major in comp sci for comparisons
+			// noticed that the category of "Senior CS, ..." all of its concrete
+			// requirements were missing their
+			// prereqs. Still need the major in comp sci for comparisons
 			ArrayList<Requirement> oneSeniorCourse = null;
-			if(currentCategory.equals("Senior CS, Elective One of:")) {
+			if (currentCategory.equals("Senior CS, Elective One of:")) {
 				oneSeniorCourse = categories.get(currentCategory);
 			}
 			String courseParse[] = null;
@@ -124,8 +206,8 @@ public class FileHandler {
 			// file.
 			while ((currentCourse = br.readLine()) != null) {
 				courseParse = currentCourse.split("_"); // important info is separated by _ in the txt file
-				
-				if(courseParse[0].equals(nextCategory)) {
+
+				if (courseParse[0].equals(nextCategory)) {
 					break;
 				}
 				// courseParse[0] is the subject. ex "MATH" "CS" "ECE"
@@ -135,11 +217,11 @@ public class FileHandler {
 				// courseParse[3] is the number of credits the course is worth
 				// courseParse[4] is if the course has been fulfilled
 				ConcreteRequirement course = new ConcreteRequirement(courseParse[0], Integer.parseInt(courseParse[1]),
-						courseParse[2], Integer.parseInt(courseParse[3]),Boolean.parseBoolean(courseParse[4]));
-				if(currentCategory.equals("Major in Computer Science")) {
+						courseParse[2], Integer.parseInt(courseParse[3]), Boolean.parseBoolean(courseParse[4]));
+				if (currentCategory.equals("Major in Computer Science")) {
 					majorInCompSci.add(course);
 				}
-				//if we're not in Major in Computer Science, then we're in the "Senior CS, ..."
+				// if we're not in Major in Computer Science, then we're in the "Senior CS, ..."
 				else {
 					oneSeniorCourse.add(course);
 				}
@@ -195,77 +277,118 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void saveSchedule() {
 		try {
 			printWriter = new PrintWriter(new FileWriter(outputFile));
 			writeAbstract("University Core");
-			writeAbstract("Computer Science Department");
+			writeAbstractScience("Computer Science Department");
 			writeConcrete("Major in Computer Science");
 			writeConcrete("Senior CS, Elective One of:");
-			writeAbstract("Senior CS, Additional");
-			writeAbstract("CS-Related Courses");
+			writeAbstractCSSeniorAndRelated("Senior CS, Additional");
+			writeAbstractCSSeniorAndRelated("CS-Related Courses");
 			printWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	private void writeAbstract(String currentCategory) {
 		ArrayList<Requirement> category = categories.get(currentCategory);
-		printWriter.printf("%s%n",currentCategory);//write category to file
-		for(int i = 0; i < category.size(); i++){
+		printWriter.printf("%s%n", currentCategory);// write category to file
+		for (int i = 0; i < category.size(); i++) {
 			Requirement temp = category.get(i);
-			//we have our one concrete requirement, regular write to wont work.
-			if(temp.getLabelForFileHandler().equals("Public Speaking")) {
-				//damn printf wont just write 1 or 0 for fulfilled!
-				if(temp.isFulfilled()) {
-					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), 1, temp.getCredits());
-				}
-				else {
-					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), 0, temp.getCredits());
+			// we just have our usual abstract requirements
+			if (temp.isFulfilled()) {
+				printWriter.printf("%s_%d_%d%n", temp.getLabel(), 1, temp.getCredits());
+			} else {
+				printWriter.printf("%s_%d_%d%n", temp.getLabel(), 0, temp.getCredits());
+			}
+
+		}
+	}
+
+	private void writeAbstractScience(String currentCategory) {
+		ArrayList<Requirement> category = categories.get(currentCategory);
+		printWriter.printf("%s%n", currentCategory);// write category to file
+		for (int i = 0; i < category.size(); i++) {
+			Requirement temp = category.get(i);
+			// we have our one concrete requirement, regular write to wont work.
+			if (temp.getLabelForFileHandler().equals("Public Speaking")) {
+				if (temp.isFulfilled()) {
+					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), 1, temp.getCredits());
+				} else {
+					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), 0, temp.getCredits());
 				}
 			}
-			//we just have our usual abstract requirement
+			// have abstract requirements, potentially with prereqs
 			else {
-				if(temp.isFulfilled()) {
-					printWriter.printf("%s_%d_%d%n",temp.getLabel(), 1, temp.getCredits());
-				}
-				else {
-					printWriter.printf("%s_%d_%d%n",temp.getLabel(), 0, temp.getCredits());
+				if (temp.getPrerequisiteFor() != null) {
+					if (temp.isFulfilled()) {
+						printWriter.printf("%s_%d_%d_%s%n", temp.getLabel(), 1, temp.getCredits(), temp.getPrerequisiteFor().get(0).getLabel());
+					} else {
+						printWriter.printf("%s_%d_%d_%s%n", temp.getLabel(), 0, temp.getCredits(), temp.getPrerequisiteFor().get(0).getLabel());
+					}
+				} else {
+					if (temp.isFulfilled()) {
+						printWriter.printf("%s_%d_%d%n", temp.getLabel(), 1, temp.getCredits());
+					} else {
+						printWriter.printf("%s_%d_%d%n", temp.getLabel(), 0, temp.getCredits());
+					}
 				}
 			}
 		}
 	}
+
+	private void writeAbstractCSSeniorAndRelated(String currentCategory) {
+		ArrayList<Requirement> category = categories.get(currentCategory);
+		printWriter.printf("%s%n", currentCategory);// write category to file
+		for (int i = 0; i < category.size(); i++) {
+			Requirement temp = category.get(i);
+			Requirement preReq = temp.getPrerequisiteFor().get(0);
+			// have abstract requirements, these always have prereqs
+			if (temp.isFulfilled()) {
+				printWriter.printf("%s_%d_%d_%s_%d%n", temp.getLabel(), 1, temp.getCredits(), preReq.getSubject(), preReq.getNumber());
+			} else {
+				printWriter.printf("%s_%d_%d_%s_%d%n", temp.getLabel(), 0, temp.getCredits(), preReq.getSubject(), preReq.getNumber());
+			}
+		}
+	}
+
 	private void writeConcrete(String currentCategory) {
 		ArrayList<Requirement> category = categories.get(currentCategory);
-		printWriter.printf("%s%n",currentCategory);//write category to file
-		for(int i = 0; i < category.size(); i++){
+		printWriter.printf("%s%n", currentCategory);// write category to file
+		for (int i = 0; i < category.size(); i++) {
 			Requirement temp = category.get(i);
-			if(temp.getPrerequisiteFor() == null) { //course with no prereqs
-				if(temp.isFulfilled()) {
-					//note that in the text file credits and labels have switched position 
-					//for all concrete requirements except COMM
-					//since apparently i hate consistency.
-					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), temp.getCredits(), 1);
-				}
-				else {
-					printWriter.printf("%s_%d_%s_%d_%d%n",temp.getSubject(), temp.getNumber(), temp.getLabelForFileHandler(), temp.getCredits(), 0);
+			if (temp.getPrerequisiteFor() == null) { // course with no prereqs
+				if (temp.isFulfilled()) {
+					// note that in the text file credits and labels have switched position
+					// for all concrete requirements except COMM
+					// since apparently i hate consistency.
+					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), temp.getCredits(), 1);
+				} else {
+					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), temp.getCredits(), 0);
 				}
 			}
-			//we have an array of prereqs
+			// we have an array of prereqs
 			else {
 				ArrayList<Requirement> getPreReqs = temp.getPrerequisiteFor();
 				String course = null;
-				if(temp.isFulfilled()) {
-					course = temp.getSubject() + "_" + temp.getNumber() +"_"+ temp.getLabelForFileHandler() +"_"+ temp.getCredits() +"_"+ 1 +"_"+getPreReqs.size();
+				if (temp.isFulfilled()) {
+					course = temp.getSubject() + "_" + temp.getNumber() + "_" + temp.getLabelForFileHandler() + "_"
+							+ temp.getCredits() + "_" + 1 + "_" + getPreReqs.size();
+				} else {
+					course = temp.getSubject() + "_" + temp.getNumber() + "_" + temp.getLabelForFileHandler() + "_"
+							+ temp.getCredits() + "_" + 0 + "_" + getPreReqs.size();
 				}
-				else {
-					course = temp.getSubject() + "_" + temp.getNumber() +"_"+ temp.getLabelForFileHandler() +"_"+ temp.getCredits() +"_"+ 0 +"_"+getPreReqs.size(); 
-				}
-				//set up initial course, with number of prereqs tacked onto end
-				
-				for(int j = 0; j < getPreReqs.size(); j++) {
+				// set up initial course, with number of prereqs tacked onto end
+
+				for (int j = 0; j < getPreReqs.size(); j++) {
 					Requirement prereq = getPreReqs.get(j);
 					course = course + "_" + prereq.getSubject() + "_" + prereq.getNumber();
 				}
@@ -273,10 +396,12 @@ public class FileHandler {
 			}
 		}
 	}
+
 	public static void main(String[] args) {
 		// the file paths will need to change on your computer
 		FileHandler test = new FileHandler(
-				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt", "D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
+				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements2.txt",
+				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
 			test.getCourseReqs();
 			test.saveSchedule();

@@ -14,20 +14,96 @@ public class Schedule {
 	 */
 	public void genSchedule(Degree d)
 	{
-		
+		semesters= new ArrayList<>();
+		semesters.add(new Semester());
 		ArrayList<Requirement> reqs = new ArrayList<>();
-		for(Requirement k:d.getAdditionalSeniorCS())
-			reqs.add(k);
-		for(Requirement k:d.getComputerScienceDepartment())
-			reqs.add(k);
-		for(Requirement k:d.getCSRelatedCourses())
-			reqs.add(k);
+		
+		ArrayList<ArrayList<Requirement>> lists = new ArrayList<>();
+		ArrayList<Requirement> adds = new ArrayList<>();
+		ArrayList<Requirement> tooMuch = new ArrayList<>();
+		ArrayList<Requirement> stillTooMuch = new ArrayList<>();
+		ArrayList<Requirement> anotherSorter = new ArrayList<>();
+		ArrayList<Requirement> thanksCS = new ArrayList<>();
 		for(Requirement k:d.getMajorInComputerScience())
-			reqs.add(k);
-		for(Requirement k:d.getSeniorCSOneElective())
-			reqs.add(k);
+			tooMuch.add(k);
+		anotherSorter.add(tooMuch.remove(2));
+		anotherSorter.add(tooMuch.remove(3));
+		for(int cntr = 0;cntr<12;cntr++)
+			stillTooMuch.add(tooMuch.remove(7));
+		for(int i=0;i<stillTooMuch.size();i++)
+			if(i%2==0)
+				thanksCS.add(stillTooMuch.get(i));
+		for(Requirement k:thanksCS)
+		{
+			for(int i=stillTooMuch.size()-1;i>=0;i--)
+			{
+				if(k.isEqual(stillTooMuch.get(i)))
+					stillTooMuch.remove(i);
+			}
+		}
+		for(Requirement k : stillTooMuch)
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k : thanksCS)
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k :anotherSorter)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<>();
+		for(Requirement k : tooMuch)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<Requirement>();
+		
 		for(Requirement k:d.getUniversityCore())
-			reqs.add(k);
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k:d.getComputerScienceDepartment())
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k:d.getCSRelatedCourses())
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k:d.getAdditionalSeniorCS())
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		boolean pickOne=false;
+		for(Requirement one:d.getSeniorCSOneElective())
+		{
+			if(one.isFulfilled())
+			{
+				pickOne=true;
+				break;
+			}
+		}
+		if(!pickOne)
+		{
+			int rand = ((int)(Math.random()*10.0))%3;
+			adds.add(d.getSeniorCSOneElective().get(rand));
+			lists.add(adds);
+		}
+		while(!lists.isEmpty())
+		{
+			for(ArrayList<Requirement>k:lists)
+			{
+				if(!k.isEmpty())
+					reqs.add(k.remove(0));
+				else
+				{
+					lists.remove(k);
+					break;
+				}
+			}
+		}
+		
+	 	
 		int semesterCntr=0;
 		int addedAt=-1;
 		while(!reqs.isEmpty())
@@ -115,9 +191,12 @@ public class Schedule {
 	 */
 	public void genSchedule(ArrayList<Requirement>c)
 	{
+		semesters= new ArrayList<>();
+		semesters.add(new Semester());
 		ArrayList<Requirement> reqs = new ArrayList<>();
 		for(Requirement r:c)
 			reqs.add(r);
+		Collections.shuffle(reqs);
 		int semesterCntr=0;
 		int addedAt=-1;
 		while(!reqs.isEmpty())

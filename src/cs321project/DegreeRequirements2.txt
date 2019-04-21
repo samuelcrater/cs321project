@@ -7,9 +7,13 @@ Social and Behavioral Science_0_3
 Computer Science Department
 COMM_100_Public Speaking_0_3
 Natural Science, Sequence1_0_4
-Natural Science, Sequence2_0_4
+Natural Science, Sequence2_0_4_Natural Science, Sequence1
 Natural Science, Additional_0_4
+Elective_0_3
+Elective_0_3
 Major in Computer Science
+ENGH_101_Composition_3_0
+ENGH_302_Advanced Composition_3_0_1_ENGH_101
 MATH_113_Analytic Geometry & Calculus I_4_0
 MATH_114_Analytic Geometry & Calculus II_4_0_1_MATH_113
 MATH_125_Discrete Mathematics I_3_0_1_MATH_113
@@ -26,7 +30,7 @@ CS_306_Synth. of Ethics and Law for the Computing Prof._3_0_1_CS_105
 CS_310_Data Structures_3_0_2_MATH_113_CS_211
 CS_321_Software Engineering_3_0_1_CS_211
 CS_330_Formal Methods and Models_3_0_2_MATH_125_CS_211
-CS_367_Computer Systems and Programming_4_0_2_ECE_301_CS_262
+CS_367_Computer Systems and Programming_4_0_2_MATH_125_CS_262
 CS_465_Computer Systems Architecture_3_0_1_CS_367
 CS_483_Analysis of Algorithms_3_0_3_MATH_125_CS_310_CS_330
 Senior CS, Elective One of:
@@ -34,10 +38,10 @@ CS_463_Comparative Programming Language_3_0_2_CS_330_CS_367
 CS_471_Operating Systems_3_0_2_CS_310_CS_367
 CS_475_Concurrent and Distributed Systems_3_0_2_CS_310_CS_367
 Senior CS, Additional
-Senior CS, Additional_0_3
-Senior CS, Additional_0_3
-Senior CS, Additional_0_3
-Senior CS, Additional_0_3
+Senior CS, Additional_0_3_CS_367
+Senior CS, Additional_0_3_CS_367
+Senior CS, Additional_0_3_CS_367
+Senior CS, Additional_0_3_CS_367
 CS-Related Courses
-CS-Related Courses_0_3
-CS-Related Courses_0_3
+CS-Related Courses_0_3_CS_310
+CS-Related Courses_0_3_CS_310
