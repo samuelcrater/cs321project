@@ -1,6 +1,8 @@
 package cs321project;
 
 import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +30,6 @@ public class GUI extends JFrame {
 	private ScheduleController sc;
 	
 	public GUI() {
-		
 		//makes GUI style itself like its host OS.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -82,7 +83,11 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//dummy action
-				setSize(900,700);
+				//setSize(900,700);
+				FileDialog dialog = new FileDialog((Frame)null, "Select File");
+			    //dialog.setMode(FileDialog.LOAD);
+			    dialog.setVisible(true);
+			    sc.getFile(dialog.getFile());
 			}
 			
 		});
@@ -93,12 +98,10 @@ public class GUI extends JFrame {
 		//Toolkit will return Ctrl on Windows and Cmnd on Mac
 		menuItem.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		menuItem.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				sc.saveSchedule();
 			}
-			
 		});
 		fileMenu.add(menuItem);
 		
@@ -112,17 +115,20 @@ public class GUI extends JFrame {
     	schedView.setScheduleController(sc);
     }
     
-	//must be called after initialized
+	//must be called before used
     public void display() {
         this.setVisible(true);
     }
     
-    public void updateDegree(HashMap<String, ArrayList<Requirement>> requirements) {
-    	reqView.populate(requirements);
+    public void updateDegree(Degree degree) {
+    	reqView.populate(degree.getAllRequirements());
+    	reqView.setDegreeLabel(degree.getCatalog());
+    	this.pack();
     }
     
     public void updateSchedule(ArrayList<Semester> semesters) {
-    	System.out.println(semesters.size());
+    	//System.out.println("Semester count: " + semesters.size());
     	schedView.populate(semesters);
+    	this.pack();
     }
 }

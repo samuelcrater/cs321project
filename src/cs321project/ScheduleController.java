@@ -24,9 +24,18 @@ public class ScheduleController {
 	 * protected ScheduleController() { //TODO FileHandler constructor //TODO Degree
 	 * constructor schedule = new Schedule(); }
 	 */
+	protected void getFile(String file) {
+		fileHandler = new FileHandler(file, "output.txt");
+		try {
+			loadFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	protected void loadFile() throws IOException {
 		degree = fileHandler.getDegree();
-		gui.updateDegree(degree.getAllRequirements());
+		gui.updateDegree(degree);
 	}
 	
 	protected void saveSchedule() {
