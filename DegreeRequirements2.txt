@@ -30,7 +30,7 @@ CS_306_Synth. of Ethics and Law for the Computing Prof._3_0_1_CS_105
 CS_310_Data Structures_3_0_2_MATH_113_CS_211
 CS_321_Software Engineering_3_0_1_CS_211
 CS_330_Formal Methods and Models_3_0_2_MATH_125_CS_211
-CS_367_Computer Systems and Programming_4_0_2_ECE_301_CS_262
+CS_367_Computer Systems and Programming_4_0_2_MATH_125_CS_262
 CS_465_Computer Systems Architecture_3_0_1_CS_367
 CS_483_Analysis of Algorithms_3_0_3_MATH_125_CS_310_CS_330
 Senior CS, Elective One of:

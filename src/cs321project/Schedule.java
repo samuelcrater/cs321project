@@ -22,18 +22,33 @@ public class Schedule {
 		ArrayList<Requirement> adds = new ArrayList<>();
 		ArrayList<Requirement> tooMuch = new ArrayList<>();
 		ArrayList<Requirement> stillTooMuch = new ArrayList<>();
+		ArrayList<Requirement> anotherSorter = new ArrayList<>();
+		ArrayList<Requirement> thanksCS = new ArrayList<>();
 		for(Requirement k:d.getMajorInComputerScience())
 			tooMuch.add(k);
-		for(int cntr = 0;cntr<11;cntr++)
-			stillTooMuch.add(tooMuch.remove(9));
-		for(Requirement k : tooMuch)
-			adds.add(k);
-		lists.add(adds);
-		adds = new ArrayList<Requirement>();
+		anotherSorter.add(tooMuch.remove(2));
+		anotherSorter.add(tooMuch.remove(3));
+		for(int cntr = 0;cntr<12;cntr++)
+			stillTooMuch.add(tooMuch.remove(7));
+		for(int i=0;i<8;i++)
+			thanksCS.add(stillTooMuch.remove(4));
 		for(Requirement k : stillTooMuch)
 			adds.add(k);
 		lists.add(adds);
 		adds = new ArrayList<Requirement>();
+		for(Requirement k : thanksCS)
+			adds.add(k);
+		lists.add(adds);
+		adds = new ArrayList<Requirement>();
+		for(Requirement k :anotherSorter)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<>();
+		for(Requirement k : tooMuch)
+			adds.add(k);
+		lists.add(adds);
+		adds=new ArrayList<Requirement>();
+		
 		for(Requirement k:d.getUniversityCore())
 			adds.add(k);
 		lists.add(adds);
