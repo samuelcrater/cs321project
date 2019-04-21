@@ -199,7 +199,8 @@ public class Schedule {
 						}
 						if(addable)
 						{
-							added = semesters.get(semesterCntr).addCourse(reqNext);
+							if(semesters.get(semesterCntr).getNumClasses()<=4)
+								added = semesters.get(semesterCntr).addCourse(reqNext);
 							if(added)
 							{
 								addedAt=listCntr;
@@ -375,7 +376,7 @@ public class Schedule {
 				else
 				{
 					//Make sure the destination semester isn't full
-					if(semesters.get(stopIndex).getNumClasses()<5)
+					if(semesters.get(stopIndex).getNumClasses()<6)
 					{
 						Requirement toMove = semesters.get(startIndex).getCourses().get(classIndex);
 						Boolean canAdd = true;
