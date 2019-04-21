@@ -3,7 +3,7 @@ package cs321project;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+//HELLO
 public class FileHandler {
 	private HashMap<String, ArrayList<Requirement>> categories;
 	private BufferedReader br;
@@ -413,7 +413,7 @@ public class FileHandler {
 	public static void main(String[] args) {
 		// the file paths will need to change on your computer
 		FileHandler test = new FileHandler(
-				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements2.txt",
+				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements20192020.txt",
 				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
 			Degree degree = test.getDegree();
