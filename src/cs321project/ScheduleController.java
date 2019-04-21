@@ -39,7 +39,7 @@ public class ScheduleController {
 	}
 	
 	protected void saveSchedule() {
-		fileHandler.saveSchedule();
+		fileHandler.saveSchedule(schedule.getScheudle());
 	}
 	
 	protected ArrayList<Semester> generateSchedule() {

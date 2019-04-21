@@ -288,7 +288,7 @@ public class FileHandler {
 		}
 	}
 
-	public void saveSchedule() {
+	public void saveSchedule(ArrayList<Semester> semesters) {
 		try {
 			printWriter = new PrintWriter(new FileWriter(outputFile));
 			printWriter.printf("%d%n", CS310Index);
@@ -301,9 +301,23 @@ public class FileHandler {
 			writeAbstractCSSeniorAndRelated("Senior CS, Additional");
 			writeAbstractCSSeniorAndRelated("CS-Related Courses");
 			printWriter.close();
+			printWriter = new PrintWriter(new FileWriter("schedule.txt"));
+			saveSemesters(semesters);
+			printWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	public void saveSemesters(ArrayList<Semester> semesters) {
+		for(int i = 0; i < semesters.size(); i++) {
+			Semester currentSemester = semesters.get(i);
+			printWriter.printf("Semester %d:%n", i);
+			ArrayList<Requirement> coursesForCurrentSemester = currentSemester.getCourses();
+			for(int j = 0; j < coursesForCurrentSemester.size(); j++) {
+				Requirement temp = coursesForCurrentSemester.get(j);
+				printWriter.printf("\t%s%d:%n", temp.getSubject(), temp.getNumber());
+			}
 		}
 	}
 
@@ -417,7 +431,7 @@ public class FileHandler {
 				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
 			Degree degree = test.getDegree();
-			test.saveSchedule();
+			//test.saveSchedule();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
