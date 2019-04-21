@@ -29,8 +29,8 @@ public class ScheduleView extends JPanel {
 		this.setAlignmentX(CENTER_ALIGNMENT);
 		JLabel title = new JLabel("Schedule");
 		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 30));
+		title.setAlignmentX(CENTER_ALIGNMENT);
 		this.add(title);
-		//this.setBackground(Color.GRAY);
 		this.interior = new JPanel();
 		this.add(interior);
 		dragging = false;
@@ -54,6 +54,7 @@ public class ScheduleView extends JPanel {
 			
 			JLabel text = new JLabel("Semester " + i);
 			text.setFont(new Font(text.getFont().getName(), Font.PLAIN, 15));
+			text.setAlignmentX(CENTER_ALIGNMENT);
 			semester.add(text);
 			
 			int j = 0;
@@ -73,7 +74,7 @@ public class ScheduleView extends JPanel {
 			this.interior.add(semester);
 			i++;
 		}
-		System.out.println("Credit count: " + credits);
+		//System.out.println("Credit count: " + credits);
 		this.interior.validate();
 	}
 	

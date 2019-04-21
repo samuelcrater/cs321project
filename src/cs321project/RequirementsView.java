@@ -26,6 +26,7 @@ public class RequirementsView extends JPanel {
 	private ScheduleController sc;
 	private Degree degree;
 	
+	private JLabel degreeLabel;
 	private JScrollPane interiorScroller;
 	private JPanel interior;
 	private JButton generateButton;
@@ -33,10 +34,14 @@ public class RequirementsView extends JPanel {
 	public RequirementsView() {
 		this.setPreferredSize(new Dimension(250,550));
 		this.setMaximumSize(new Dimension(250,550));
-		JLabel title = new JLabel("Requirements");
-		title.setFont(new Font(title.getFont().getName(), Font.PLAIN, 30));
-		this.add(title);
-		//this.setBackground(Color.GRAY);
+		degreeLabel = new JLabel();
+		degreeLabel.setFont(new Font(degreeLabel.getFont().getName(), Font.PLAIN, 30));
+		degreeLabel.setAlignmentX(CENTER_ALIGNMENT);
+		this.add(degreeLabel);
+		JLabel reqLabel = new JLabel("Requirements");
+		reqLabel.setFont(new Font(reqLabel.getFont().getName(), Font.PLAIN, 30));
+		reqLabel.setAlignmentX(CENTER_ALIGNMENT);
+		this.add(reqLabel);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -47,6 +52,7 @@ public class RequirementsView extends JPanel {
 		
 		//button
 		generateButton = new JButton("Generate Schedule");
+		generateButton.setAlignmentX(CENTER_ALIGNMENT);
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -98,4 +104,8 @@ public class RequirementsView extends JPanel {
 	public void setScheduleController(ScheduleController sc) {
     	this.sc = sc;
     }
+	
+	public void setDegreeLabel(String text) {
+		degreeLabel.setText(text);
+	}
 }
