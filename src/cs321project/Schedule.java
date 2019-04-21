@@ -30,8 +30,17 @@ public class Schedule {
 		anotherSorter.add(tooMuch.remove(3));
 		for(int cntr = 0;cntr<12;cntr++)
 			stillTooMuch.add(tooMuch.remove(7));
-		for(int i=0;i<8;i++)
-			thanksCS.add(stillTooMuch.remove(4));
+		for(int i=0;i<stillTooMuch.size();i++)
+			if(i%2==0)
+				thanksCS.add(stillTooMuch.get(i));
+		for(Requirement k:thanksCS)
+		{
+			for(int i=stillTooMuch.size()-1;i>=0;i--)
+			{
+				if(k.isEqual(stillTooMuch.get(i)))
+					stillTooMuch.remove(i);
+			}
+		}
 		for(Requirement k : stillTooMuch)
 			adds.add(k);
 		lists.add(adds);
@@ -65,9 +74,21 @@ public class Schedule {
 			adds.add(k);
 		lists.add(adds);
 		adds = new ArrayList<Requirement>();
-		int rand = ((int)(Math.random()*10.0))%3;
-		adds.add(d.getSeniorCSOneElective().get(rand));
-		lists.add(adds);
+		boolean pickOne=false;
+		for(Requirement one:d.getSeniorCSOneElective())
+		{
+			if(one.isFulfilled())
+			{
+				pickOne=true;
+				break;
+			}
+		}
+		if(!pickOne)
+		{
+			int rand = ((int)(Math.random()*10.0))%3;
+			adds.add(d.getSeniorCSOneElective().get(rand));
+			lists.add(adds);
+		}
 		while(!lists.isEmpty())
 		{
 			for(ArrayList<Requirement>k:lists)
