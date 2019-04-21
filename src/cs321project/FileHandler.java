@@ -167,10 +167,10 @@ public class FileHandler {
 					getCurrentCategory.add(req);
 					Requirement prereq;
 					if (currentCategory.equals("Senior CS, Additional")) {
-						prereq = categories.get("Major in Computer Science").get(16);
+						prereq = categories.get("Major in Computer Science").get(18);
 						req.addPrerequisiteFor(prereq);// dont really need a loop for this
 					} else { // we have cs Related
-						prereq = categories.get("Major in Computer Science").get(13);
+						prereq = categories.get("Major in Computer Science").get(15);
 						req.addPrerequisiteFor(prereq);// dont really need a loop for this
 					}
 
