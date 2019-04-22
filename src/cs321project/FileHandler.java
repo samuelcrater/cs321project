@@ -328,7 +328,7 @@ public class FileHandler {
 			Requirement temp = category.get(i);
 			// we just have our usual abstract requirements
 			if (temp.isFulfilled()) {
-				printWriter.printf("%s_%d_%d%n", temp.getLabel(), 1, temp.getCredits());
+				printWriter.printf("%s_%s_%d%n", temp.getLabel(), "true", temp.getCredits());
 			} else {
 				printWriter.printf("%s_%d_%d%n", temp.getLabel(), 0, temp.getCredits());
 			}
@@ -344,8 +344,8 @@ public class FileHandler {
 			// we have our one concrete requirement, regular write to wont work.
 			if (temp.getLabelForFileHandler().equals("Public Speaking")) {
 				if (temp.isFulfilled()) {
-					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
-							temp.getLabelForFileHandler(), 1, temp.getCredits());
+					printWriter.printf("%s_%d_%s_%s_%d%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), "true", temp.getCredits());
 				} else {
 					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
 							temp.getLabelForFileHandler(), 0, temp.getCredits());
@@ -355,13 +355,13 @@ public class FileHandler {
 			else {
 				if (temp.getPrerequisiteFor() != null) {
 					if (temp.isFulfilled()) {
-						printWriter.printf("%s_%d_%d_%s%n", temp.getLabel(), 1, temp.getCredits(), temp.getPrerequisiteFor().get(0).getLabel());
+						printWriter.printf("%s_%s_%d_%s%n", temp.getLabel(), "true", temp.getCredits(), temp.getPrerequisiteFor().get(0).getLabel());
 					} else {
 						printWriter.printf("%s_%d_%d_%s%n", temp.getLabel(), 0, temp.getCredits(), temp.getPrerequisiteFor().get(0).getLabel());
 					}
 				} else {
 					if (temp.isFulfilled()) {
-						printWriter.printf("%s_%d_%d%n", temp.getLabel(), 1, temp.getCredits());
+						printWriter.printf("%s_%s_%d%n", temp.getLabel(), "true", temp.getCredits());
 					} else {
 						printWriter.printf("%s_%d_%d%n", temp.getLabel(), 0, temp.getCredits());
 					}
@@ -378,7 +378,7 @@ public class FileHandler {
 			Requirement preReq = temp.getPrerequisiteFor().get(0);
 			// have abstract requirements, these always have prereqs
 			if (temp.isFulfilled()) {
-				printWriter.printf("%s_%d_%d_%s_%d%n", temp.getLabel(), 1, temp.getCredits(), preReq.getSubject(), preReq.getNumber());
+				printWriter.printf("%s_%s_%d_%s_%d%n", temp.getLabel(), "true", temp.getCredits(), preReq.getSubject(), preReq.getNumber());
 			} else {
 				printWriter.printf("%s_%d_%d_%s_%d%n", temp.getLabel(), 0, temp.getCredits(), preReq.getSubject(), preReq.getNumber());
 			}
@@ -395,8 +395,8 @@ public class FileHandler {
 					// note that in the text file credits and labels have switched position
 					// for all concrete requirements except COMM
 					// since apparently i hate consistency.
-					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
-							temp.getLabelForFileHandler(), temp.getCredits(), 1);
+					printWriter.printf("%s_%d_%s_%d_%s%n", temp.getSubject(), temp.getNumber(),
+							temp.getLabelForFileHandler(), temp.getCredits(), "true");
 				} else {
 					printWriter.printf("%s_%d_%s_%d_%d%n", temp.getSubject(), temp.getNumber(),
 							temp.getLabelForFileHandler(), temp.getCredits(), 0);
@@ -408,7 +408,7 @@ public class FileHandler {
 				String course = null;
 				if (temp.isFulfilled()) {
 					course = temp.getSubject() + "_" + temp.getNumber() + "_" + temp.getLabelForFileHandler() + "_"
-							+ temp.getCredits() + "_" + 1 + "_" + getPreReqs.size();
+							+ temp.getCredits() + "_" + "true" + "_" + getPreReqs.size();
 				} else {
 					course = temp.getSubject() + "_" + temp.getNumber() + "_" + temp.getLabelForFileHandler() + "_"
 							+ temp.getCredits() + "_" + 0 + "_" + getPreReqs.size();
@@ -427,7 +427,7 @@ public class FileHandler {
 	public static void main(String[] args) {
 		// the file paths will need to change on your computer
 		FileHandler test = new FileHandler(
-				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\DegreeRequirements20192020.txt",
+				"CS_BS_2016.txt",
 				"D:\\Users\\Isabella\\cs321project\\src\\cs321project\\saveScheduleTest.txt");
 		try {
 			Degree degree = test.getDegree();
