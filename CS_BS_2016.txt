@@ -15,7 +15,7 @@ Natural Science, Additional_0_4
 Elective_0_3
 Elective_0_3
 Major in Computer Science
-ENGH_101_Composition_3_true
+ENGH_101_Composition_3_0
 ENGH_302_Advanced Composition_3_0_1_ENGH_101
 MATH_113_Analytic Geometry & Calculus I_4_0
 MATH_114_Analytic Geometry & Calculus II_4_0_1_MATH_113
