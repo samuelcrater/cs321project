@@ -2,7 +2,6 @@ package cs321project;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,13 +12,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 public class ScheduleView extends JPanel {
 
+	private static final long serialVersionUID = -6246170280637883314L;
 	private ScheduleController sc;
 	private JPanel interior;
-	private JPanel source, destination;
+	private JPanel destination;
 	private boolean dragging, sourceProtection;
 	
 	public ScheduleView() {
@@ -39,11 +38,10 @@ public class ScheduleView extends JPanel {
 	
 	public void populate(ArrayList<Semester> semesters) {
 		this.interior.removeAll();
-		int credits = 0;
-		int i = 1;
+		int semesterCount = 1;
 		
 		for (Semester s : semesters) {
-			JPanelSemester semester = new JPanelSemester(i - 1);
+			JPanelSemester semester = new JPanelSemester(semesterCount - 1);
 			semester.setLayout(new BoxLayout(semester, BoxLayout.PAGE_AXIS));
 			semester.setMinimumSize(new Dimension(175,250));
 			semester.setPreferredSize(new Dimension(175,250));
@@ -52,14 +50,14 @@ public class ScheduleView extends JPanel {
 			semester.setBackground(Color.LIGHT_GRAY);
 			this.setSemesterMouseListener(semester);
 			
-			JLabel text = new JLabel("Semester " + i);
+			JLabel text = new JLabel("Semester " + semesterCount);
 			text.setFont(new Font(text.getFont().getName(), Font.PLAIN, 15));
 			text.setAlignmentX(CENTER_ALIGNMENT);
 			semester.add(text);
 			
-			int j = 0;
+			int courseCount = 0;
 			for (Requirement r : s.getCourses()) {
-				JPanelCourse course = new JPanelCourse(j, i - 1);
+				JPanelCourse course = new JPanelCourse(courseCount, semesterCount - 1);
 				course.setBackground(Color.GRAY);
 				JLabel label = new JLabel(r.getLabel());
 				label.setFont(new Font(label.getFont().getName(), Font.PLAIN, 12));
@@ -67,14 +65,13 @@ public class ScheduleView extends JPanel {
 				this.setCourseMouseListener(course);
 				semester.add(course);
 				semester.add(new Box.Filler(new Dimension(0, 2), new Dimension(0, 2), new Dimension(0, 2)));
-				credits += r.getCredits();
-				j++;
+				courseCount++;
 			}
 			
 			this.interior.add(semester);
-			i++;
+			semesterCount++;
 		}
-		//System.out.println("Credit count: " + credits);
+		
 		this.interior.validate();
 	}
 	
@@ -129,7 +126,7 @@ public class ScheduleView extends JPanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				source = course;
+				destination = course; //in case pressed and released on same item
 				course.setBackground(Color.RED);
 				dragging = true;
 				sourceProtection = true;

@@ -1,0 +1,46 @@
+Semester 1:
+	CS112
+	CS110
+	MATH113
+	ENGH101
+	Literature
+Semester 2:
+	COMM100
+	CS211
+	MATH125
+	ENGH302
+	Arts
+Semester 3:
+	CS262
+	Natural Science, Sequence1
+	CS310
+	CS306
+	MATH114
+Semester 4:
+	CS-Related Courses
+	CS-Related Courses
+	Western Civilization/World History
+	Natural Science, Sequence2
+	CS330
+Semester 5:
+	CS321
+	MATH203
+	Global Understanding
+	Natural Science, Additional
+	CS367
+Semester 6:
+	Senior CS, Additional
+	CS468
+	Senior CS, Additional
+	Senior CS, Additional
+	CS471
+Semester 7:
+	MATH213
+	Social and Behavioral Science
+	Elective
+	Senior CS, Additional
+	CS483
+Semester 8:
+	STAT344
+	Elective
+	Elective
